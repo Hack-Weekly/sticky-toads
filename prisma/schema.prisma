@@ -1,11 +1,76 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// couldnt use type of varchar for whatever damn reason, i will try again
+
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Text
+  username String
+  email String @unique
+  password_hash String
+  user_project User_Project[]
+  @@map("user")
+}
+
+model Project {
+  id String  @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Text
+  user_project User_Project[]
+  list List[]
+  name String
+  @@map("project")
+}
+
+model List {
+  id String  @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Text
+  project_id String
+  project Project @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  card Card[]
+  title String
+  @@map("list")
+}
+
+model Label {
+  id String  @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Text
+  card_label Card_Label[]
+  title String
+  color String
+  @@map("label")
+}
+
+model Card {
+  id String  @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Text
+  list_id String
+  card_label_id String
+  list List  @relation(fields: [list_id], references: [id], onDelete: Cascade)
+  card_label Card_Label[]
+  @@map("card")
+}
+
+model Card_Label {
+  id String @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Text
+  card_id String
+  label_id String
+  card Card @relation(fields: [card_id], references: [id], onDelete: Cascade)
+  label Label @relation(fields: [label_id], references: [id], onDelete: Cascade)
+  @@map("card_label")
+}
+
+model User_Project {
+  id String  @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Text
+  user_id String
+  project_id String
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  user_role String @unique
+  @@map("user_project")
 }
