@@ -1,11 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// couldnt use type of varchar for whatever damn reason, i will try again
-
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["multiSchema"]
 }
 
@@ -15,61 +9,68 @@ datasource db {
 }
 
 model User_Identifier {
-  id String @unique
-  username String
+  id           String         @unique
+  username     String
   user_project User_Project[]
+
   @@map("user")
 }
 
 model Project {
-  id String  @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Text
+  id           String         @id @unique @default(dbgenerated("gen_random_uuid()"))
+  name         String
+  list         List[]
   user_project User_Project[]
-  list List[]
-  name String
+
   @@map("project")
 }
 
 model List {
-  id String  @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Text
+  id         String  @id @unique @default(dbgenerated("gen_random_uuid()"))
   project_id String
-  project Project @relation(fields: [project_id], references: [id], onDelete: Cascade)
-  card Card[]
-  title String
+  title      String
+  card       Card[]
+  project    Project @relation(fields: [project_id], references: [id], onDelete: Cascade)
+
   @@map("list")
 }
 
 model Label {
-  id String  @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Text
+  id         String       @id @unique @default(dbgenerated("gen_random_uuid()"))
+  title      String
+  color      String
   card_label Card_Label[]
-  title String
-  color String
+
   @@map("label")
 }
 
 model Card {
-  id String  @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Text
-  list_id String
+  id            String       @id @unique @default(dbgenerated("gen_random_uuid()"))
+  list_id       String
   card_label_id String
-  list List  @relation(fields: [list_id], references: [id], onDelete: Cascade)
-  card_label Card_Label[]
+  list          List         @relation(fields: [list_id], references: [id], onDelete: Cascade)
+  card_label    Card_Label[]
+
   @@map("card")
 }
 
 model Card_Label {
-  id String @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Text
-  card_id String
+  id       String @id @unique @default(dbgenerated("gen_random_uuid()"))
+  card_id  String
   label_id String
-  card Card @relation(fields: [card_id], references: [id], onDelete: Cascade)
-  label Label @relation(fields: [label_id], references: [id], onDelete: Cascade)
+  card     Card   @relation(fields: [card_id], references: [id], onDelete: Cascade)
+  label    Label  @relation(fields: [label_id], references: [id], onDelete: Cascade)
+
   @@map("card_label")
 }
 
 model User_Project {
-  id String  @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Text
-  user_id String
+  id         String          @id @unique @default(dbgenerated("gen_random_uuid()"))
+  user_id    String
   project_id String
-  user User_Identifier @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  project Project @relation(fields: [project_id], references: [id], onDelete: Cascade)
-  user_role String @unique
+  user_role  String          @unique
+  project    Project         @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  user       User_Identifier @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
   @@map("user_project")
 }
