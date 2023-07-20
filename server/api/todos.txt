@@ -1,0 +1,11 @@
+check if user even has a active session before running any core functionality
+
+---
+
+clean up code, prefarably use a higher order function since a lot of the functionality does the same thing
+technically. I can do this later
+
+---
+
+prisma querys should go into the prisma dir under a sub dir named querys/ where we will organize the querys
+by what they do

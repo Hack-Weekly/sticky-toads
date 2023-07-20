@@ -1,7 +1,7 @@
-import { supabase } from "../supabase"
-import { client } from "../../prisma/client"
+import { supabase } from "../../supabase"
+import { client } from "../../../prisma/client"
 
-export default defineEventHandler( async (event) => {
+export default defineEventHandler(async (event) => {
   const { res } = event.node
   const body = await readBody(event)
 
@@ -28,7 +28,7 @@ export default defineEventHandler( async (event) => {
         username
       }
     })
-
+    await sendRedirect(event, '/sign-in', 301)
   } catch (err) {
     return res.end('Error Creating User!')
   }
