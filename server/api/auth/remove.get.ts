@@ -1,4 +1,4 @@
-import { supabase } from "../../supabase";
+import { supabase, returnUserSession } from "../../supabase";
 import { client } from "../../../prisma/client";
 
 
@@ -12,20 +12,17 @@ import { client } from "../../../prisma/client";
 
 export default defineEventHandler(async (event) => {
   try {
-    const { data, error } = await supabase.auth.getSession()
-
-    if (error) throw error
-
-    const { session, user }: any = data
-    console.log(session, user)
-    await supabase.auth.admin.deleteUser(user.id)
-    await client.user_Identifier.delete({
-      where: {
-        id: user.id
-      }
-    })
-
-    console.log('Account Removed!')
+    const { session } = await returnUserSession()
+    if (session) {
+      const { user } = session
+      await supabase.auth.admin.deleteUser(user.id)
+      await client.user_Identifier.delete({
+        where: {
+          id: user.id
+        }
+      })
+      console.log('Account Removed!')
+    }
   } catch (err) {
     console.log(err)
   } finally {

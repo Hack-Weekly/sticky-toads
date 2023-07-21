@@ -1,4 +1,4 @@
-import { supabase } from "../../supabase"
+import { supabase, returnUserSession } from "../../supabase"
 import { client } from "../../../prisma/client"
 
 export default defineEventHandler(async (event) => {
@@ -9,11 +9,15 @@ export default defineEventHandler(async (event) => {
   const username = body.username
   const password = body.password
 
+  const { session } = await returnUserSession()
+  if (session) return await sendRedirect(event, '/client/mainContent', 301)
+
   try {
     const { data, error } = await supabase.auth.signUp({
       email,
       password
     })
+
     const userData: any = data
     const userId: any = userData.user.id
     if (error) throw error
