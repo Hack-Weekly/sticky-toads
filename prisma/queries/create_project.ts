@@ -1,19 +1,8 @@
 import { supabase } from "server/supabase";
-import {PrismaClient} from "@prisma/client";
 
-//tried my damn best to figure prisma, but nothing worked
-//so I made the queries using supabase c:
-//oh also if this doesn't work, we'll need triggers
-//cause other wise it won't be possible to insert the data into user_project
+//sorry I give up on Prisma 
 
-//also the body.name is something I completely made up cause I am not sure how to know
-//how the data is sent in the body(or atleast how to know how it is named)
-
-export default defineEventHandler(async (event) => {
-    
-    const body = await readBody(event)
-    const projectName = body.name;
-    
+export async function  createProject(projectName: string){
 
     try{
         const {error: projectErr} = await supabase
@@ -35,4 +24,8 @@ export default defineEventHandler(async (event) => {
         console.log("There was an error making the project");
 
     }
-  })
+
+}
+    
+    
+  
