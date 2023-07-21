@@ -1,6 +1,8 @@
-import { supabase } from "../../supabase";
+import { supabase, returnUserSession } from "../../supabase"
 
 export default defineEventHandler(async (event) => {
+  const { user } = await returnUserSession()
+  if (!user) return sendRedirect(event, '/', 403)
   try {
     const { error } = await supabase.auth.signOut()
     if (error) throw error
