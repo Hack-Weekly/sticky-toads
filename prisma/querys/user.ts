@@ -1,4 +1,4 @@
-import { client } from "prisma/client";
+import { client } from "../client";
 
 async function updateUserIdentity (whereObj: any, dataObj: any) {
   await client.user_Identifier.update({

@@ -9,8 +9,8 @@ export default defineEventHandler(async (event) => {
   const username = body.username
   const password = body.password
 
-  const { session } = await returnUserSession()
-  if (session) return await sendRedirect(event, '/client/mainContent', 301)
+  const { user } = await returnUserSession()
+  if (user) return await sendRedirect(event, '/client/mainContent', 301)
 
   try {
     const { data, error } = await supabase.auth.signUp({

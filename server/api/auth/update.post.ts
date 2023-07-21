@@ -9,9 +9,9 @@ export default defineEventHandler(async (event) => {
   const email = body.email
   const password = body.password
   const username = body.username
-  const { session } = await returnUserSession()
+  const { user } = await returnUserSession()
   try {
-    if (session) {
+    if (user) {
       if (email && password) {
         await updateUserInfo({ email, password })
       } else if (email) {

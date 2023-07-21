@@ -6,8 +6,8 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const email = body.email
   const password = body.password
-  const { session } = await returnUserSession()
-  if (session) return await sendRedirect(event, '/client/mainContent')
+  const { user } = await returnUserSession()
+  if (user) return await sendRedirect(event, '/client/mainContent', 301)
   try {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
     // @ts-ignore
     console.log(`User ${data.user.id} Signed In!`)
     if (error) throw error
-    await sendRedirect(event, '/client/mainContent', 301)
+    await sendRedirect(event, '/', 301)
   } catch (err) {
       return res.end('Error On Sign In!')
   }
