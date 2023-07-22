@@ -6,7 +6,7 @@
                     <div class="divide-y divide-gray-700/50">
                         <h1 class="text-3xl font-bold text-center text-gray-100 pb-3">Sign-in to your account</h1>
                         <div class="pt-8 text-base font-semibold leading-7">
-                            <form>
+                            <form @submit.prevent="onSubmit">
                                 <div class="space-y-4 text-white">
                                     <div>
                                         <label for="name" class="">Username</label>
@@ -34,4 +34,25 @@
         </div>
     </section>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useForm } from 'vee-validate';
+import userSignIn from '../../types/interfaces/userSignIn';
+import * as yup from 'yup';
+
+const schema = yup.object({
+  username: yup.string().required('Username is required'),
+  password: yup.string().required('Password is required')
+});
+
+const { handleSubmit } = useForm<userSignIn>({
+  validationSchema: schema
+});
+
+const onSubmit = handleSubmit((values) => {
+  alert(JSON.stringify(values, null, 2));
+
+  /* Bionic make your API call here */
+});
+
+
+</script>

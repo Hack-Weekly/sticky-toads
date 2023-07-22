@@ -49,18 +49,23 @@ import userSignUp from '../../types/interfaces/userSignUp';
 import * as yup from 'yup';
 
 const schema = yup.object({
-  username: yup.string().required(),
-  email: yup.string().required().email(),
-  password: yup.string().required().min(8),
-  passwordConfirm: yup.string().required().min(8)
+  username: yup.string().required('Username is required'),
+  email: yup.string().required('Email is required').email('Invalid email format'),
+  password: yup.string().required('Password is required').min(6)
+  .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+  .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+  .matches(/[0-9]/, 'Password must contain at least one number'),
+  passwordConfirm: yup.string().required('Password must be confirmed').min(6).oneOf([yup.ref('password')], 'Passwords must match'),
 });
 
-const { handleSubmit } = useForm({
+const { handleSubmit } = useForm<userSignUp>({
   validationSchema: schema
 });
 
-const onSubmit = handleSubmit<userSignUp>(values => {
+const onSubmit = handleSubmit((values) => {
   alert(JSON.stringify(values, null, 2));
+
+  /* Bionic make your API call here */
 });
 
 </script>
