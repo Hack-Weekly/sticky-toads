@@ -1,5 +1,5 @@
 import { returnUserSession } from "../../supabase"
-import { createProject } from "../../../prisma/querys/create"
+import { createProject } from "../../../prisma/querys/project"
 
 export default defineEventHandler(async (event) => {
   const { res } = event.node
@@ -9,8 +9,10 @@ export default defineEventHandler(async (event) => {
   if (!user) return new Error('Session Not Found!')
   try {
     await createProject(user.id, projectName)
+    console.log(`USER ${user.id} SUCCESSFULLY CREATED PROJECT ${projectName}`)
+    res.end(`Successfully created project ${projectName}`)
   } catch (err) {
     console.log(err)
-    return res.end(err)
+    return res.end('Error creating project!')
   }
 })

@@ -18,7 +18,7 @@ model User_Identifier {
   id String @unique
   username String
   user_project User_Project[]
-  @@map("user")
+  @@map("user_identifier")
 }
 
 model Project {
@@ -52,6 +52,8 @@ model Card {
   card_label_id String
   list List  @relation(fields: [list_id], references: [id], onDelete: Cascade)
   card_label Card_Label[]
+  title String
+  description String
   @@map("card")
 }
 
@@ -70,6 +72,6 @@ model User_Project {
   project_id String
   user User_Identifier @relation(fields: [user_id], references: [id], onDelete: Cascade)
   project Project @relation(fields: [project_id], references: [id], onDelete: Cascade)
-  user_role String @unique
+  user_role String? @unique
   @@map("user_project")
 }
