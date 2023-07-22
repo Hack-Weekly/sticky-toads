@@ -11,3 +11,18 @@ export async function updateUserIdentityUsername(userId: string, username: strin
   if (!userId || !username) throw new Error('Id or Username is falsy, please try again!')
   await updateUserIdentity({ id: userId }, { username })
 }
+
+export async function getAllUserData(userId: string) {
+  await client.user_Identifier.findUnique({
+    where: {
+      id: userId
+    },
+    include: {
+      user_project: {
+        include: {
+          project: true,
+        },
+      },
+    },
+  })
+}
