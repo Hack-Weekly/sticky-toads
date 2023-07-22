@@ -39,7 +39,7 @@
                         <input type="text" class="w-full max-w-[325px] min-w-[325px] outline-none shadow-sm focus:ring-0 sm:text-sm border border-gray-700 bg-primary py-2 rounded-md pl-10 pr-2" placeholder="search Porject">
                         <button class="py2 px-4 text-white transition-all duration-300 hover:text-cyan-400"> Search </button>
                     </div>
-                    <ButtonPrimary text="Add new note"  class="cursor-pointer"/>
+                    <ButtonPrimary text="Add new note" type="button" class="cursor-pointer"/>
                 </div>
 
             </div>
