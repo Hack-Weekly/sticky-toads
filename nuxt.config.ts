@@ -15,5 +15,10 @@ export default defineNuxtConfig({
       script: []
     },
   },
-
+  runtimeConfig: {
+    public: {
+      SUPABASE_URL: process.env.SUPABASE_URL,
+      SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY
+    }
+  }
 })
