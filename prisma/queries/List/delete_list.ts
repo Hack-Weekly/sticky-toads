@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { supabase } from "server/supabase";
 
 export async function deleteList(ListID: string){
 
@@ -6,7 +7,8 @@ export async function deleteList(ListID: string){
 
     try{
 
-        if(ListID == null) throw Error;
+        const {data, error} = await supabase.auth.getSession();
+        if(ListID == null || error) throw Error;
 
         await client.list.delete({
 
@@ -15,7 +17,7 @@ export async function deleteList(ListID: string){
         })
 
 
-    }catch(error){
+    }catch(err){
 
         console.log("There is an error deleting the list")
 

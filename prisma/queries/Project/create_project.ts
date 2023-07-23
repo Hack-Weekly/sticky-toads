@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { supabase } from "server/supabase";
 
 
 
@@ -7,29 +8,36 @@ export async function  createProject(projectName: string){
 
     const client = new PrismaClient();
     
+    try{
 
+        const {data, error} = await supabase.auth.getSession();
+        if(projectName == null || error) throw new Error("Error occurred or fields are null");;
 
-    const createdProject = await client.project.create({
-        data:{
+        const createdProject = await client.project.create({
+            data:{
 
-            name: projectName
+                name: projectName
 
-        }
-    })
+            }
+        })
     
-    let rowCount = await client.project.count({});
-    
-    await client.user_Project.create({
+        await client.user_Project.create({
 
-        data:{
-
-            user_id: "123", //placeholder
-            project_id: createdProject.id,
-            user_role: "admin"
+            data:{
+                // @ts-ignore
+                user_id: data.session.user.id.toString(), 
+                project_id: createdProject.id,
+                user_role: "admin"
             
-        }
+            }
 
-    })
+        })
+
+    }catch(err){
+
+        console.log("there was an error creating the project")
+
+    }
 
 }
 

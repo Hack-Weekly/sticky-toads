@@ -1,12 +1,13 @@
 import { PrismaClient } from "@prisma/client";
+import { supabase } from "server/supabase";
 
 export async function updateListProject(ListID: string, newProjID: string){
 
     const client = new PrismaClient();
 
     try{
-
-        if(ListID == null || newProjID == null) throw Error;
+        const {data, error} = await supabase.auth.getSession();
+        if(ListID == null || newProjID == null || error) throw new Error("Error occurred or fields are null");
 
         await client.list.update({
 
@@ -15,7 +16,7 @@ export async function updateListProject(ListID: string, newProjID: string){
 
         })
 
-    }catch(error){
+    }catch(err){
 
         console.log("There was an error updating the project")
 

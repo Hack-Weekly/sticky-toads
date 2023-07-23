@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { supabase } from "server/supabase";
 
 export async function updateListName(ListID: string, newName: string){
 
@@ -6,7 +7,9 @@ export async function updateListName(ListID: string, newName: string){
 
     try{
 
-        if(ListID == null || newName == null) throw Error;
+        const {data, error} = await supabase.auth.getSession();
+
+        if(ListID == null || newName == null || error) throw Error;
 
         await client.list.update({
 
@@ -15,7 +18,7 @@ export async function updateListName(ListID: string, newName: string){
 
         })
 
-    } catch(error){
+    } catch(err){
 
         console.log("There was an error updating the name of the list");
 
