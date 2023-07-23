@@ -68,4 +68,8 @@ const onSubmit = handleSubmit((values) => {
   /* Bionic make your API call here */
 });
 
+definePageMeta({
+  layout: false // exclude the default layout
+})
+
 </script>
