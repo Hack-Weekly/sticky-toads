@@ -1,27 +1,35 @@
 import { client } from "../client"
+import { queryHandler } from "./handler"
 // projects
 
 export async function createProject (userId: string, projectName: string) {
-  await client.user_Project.create({
-    data: {
-      user: {
-        connect: { id: userId }
-      },
-      project: {
-        create: {
-          name: projectName
-        }
-      }
-    },
-  })
+    if (!projectName) throw new Error('Server Unable To Process Project Name Please Try Again!')
+    const { error }: any = await queryHandler('Failed To Create Project!', async () => { 
+      await client.user_Project.create({
+        data: {
+          user: {
+            connect: { id: userId }
+          },
+          project: {
+            create: {
+              name: projectName
+            }
+          }
+        },
+      })
+    })
+
+    if (error) throw error
 }
 
 export async function deleteProject (projectId: string, userId: string) {
-  await client.project.delete({
+  const { error }: any = await queryHandler(`Failed To Delete Projecit ${projectId}`, async () => await client.project.delete({
     where: {
       id: projectId,
     },
-  })
+  }))
+
+  if (error) throw error
 }
 
 async function updateProject (condition: any, data: Object) {
@@ -32,21 +40,26 @@ async function updateProject (condition: any, data: Object) {
 }
 
 export async function updateProjectName (projectId: string, newProjectName: string) {
-  await updateProject({ id: projectId }, { name: newProjectName})
+  const { error }: any = await queryHandler('Failed To Update Project Name!', async () => await updateProject({ id: projectId }, { name: newProjectName}))
+
+  if (error) throw error
 }
 
 export async function createProjectList(projectId: string, listTitle: string) {
-  await updateProject({
+  const { error } = await queryHandler('Failed To Create Project List!', async () => await updateProject({
     id: projectId
-  },
-  {
+   },
+   {
     list: {
       create: {
         title: listTitle,
-      }
-    }
-  })
+          }
+        }
+   }))
+
+  if (error) throw error
 }
+
 // instead of object create an interface that can take a set of predefined types or something
 // this way we can make sure that the correct data is inserted within the argument
 
@@ -72,4 +85,3 @@ export async function createCard (cardData: Card) {
   })
 
 }
-

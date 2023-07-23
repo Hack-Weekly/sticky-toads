@@ -11,6 +11,6 @@ export default defineEventHandler(async (event) => {
     res.end('Successfully Deleted Project!')
   } catch (e) {
     console.log(`ERROR ON PROJECT DELETION: ${e}`)
-    res.end('Project Does Not Exist!')
+    res.end(e)
   }
 })

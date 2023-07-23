@@ -22,6 +22,6 @@ export default defineEventHandler(async (event) => {
     res.end('Successfully Updated Project!')
   } catch (e) {
     console.log(`ERROR ON PROJECT UPDATE: ${e}`)
-    res.end('Server Error On Project Update!')
+    res.end(e)
   }
 })

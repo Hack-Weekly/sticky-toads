@@ -11,8 +11,8 @@ export default defineEventHandler(async (event) => {
     await createProject(user.id, projectName)
     console.log(`USER ${user.id} SUCCESSFULLY CREATED PROJECT ${projectName}`)
     res.end(`Successfully created project ${projectName}`)
-  } catch (err) {
-    console.log(err)
-    return res.end('Error creating project!')
+  } catch (e) {
+    console.log(e)
+    return res.end(`${e}`)
   }
 })
