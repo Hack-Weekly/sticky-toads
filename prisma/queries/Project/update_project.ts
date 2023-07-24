@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { supabase } from "server/supabase";
+import { supabase } from "supabase";
 export async function updateProjectName(ProjID: string, newName: string){
 
     const client = new PrismaClient();

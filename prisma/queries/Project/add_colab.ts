@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { supabase } from "server/supabase";
+import { supabase } from "supabase";
 
 export async function addColab(userID: string, projectID: string, role: string){
 
