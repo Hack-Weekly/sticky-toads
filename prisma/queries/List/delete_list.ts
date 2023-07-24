@@ -7,8 +7,8 @@ export async function deleteList(ListID: string){
 
     try{
 
-        const {data, error} = await supabase.auth.getSession();
-        if(ListID == null || error) throw Error;
+        const {error} = await supabase.auth.getSession();
+        if(ListID == null || error) throw new Error();
 
         await client.list.delete({
 

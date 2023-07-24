@@ -6,8 +6,8 @@ export async function updateListProject(ListID: string, newProjID: string){
     const client = new PrismaClient();
 
     try{
-        const {data, error} = await supabase.auth.getSession();
-        if(ListID == null || newProjID == null || error) throw new Error("Error occurred or fields are null");
+        const {error} = await supabase.auth.getSession();
+        if(ListID == null || newProjID == null || error) throw new Error();
 
         await client.list.update({
 

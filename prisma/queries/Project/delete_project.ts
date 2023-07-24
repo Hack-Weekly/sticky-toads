@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { supabase } from "server/supabase";
 
 export async function deleteProject(UserProjID: string){
 
@@ -6,7 +7,8 @@ export async function deleteProject(UserProjID: string){
 
     try{
 
-        if(UserProjID == null) throw Error;
+        const {error} = await supabase.auth.getSession();
+        if(UserProjID == null || error) throw new Error();
 
         await client.user_Project.delete({
 

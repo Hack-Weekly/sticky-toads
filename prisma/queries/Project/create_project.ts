@@ -11,7 +11,7 @@ export async function  createProject(projectName: string){
     try{
 
         const {data, error} = await supabase.auth.getSession();
-        if(projectName == null || error) throw new Error("Error occurred or fields are null");;
+        if(projectName == null || error) throw new Error();
 
         const createdProject = await client.project.create({
             data:{

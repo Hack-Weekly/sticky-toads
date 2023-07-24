@@ -7,9 +7,9 @@ export async function updateListName(ListID: string, newName: string){
 
     try{
 
-        const {data, error} = await supabase.auth.getSession();
+        const {error} = await supabase.auth.getSession();
 
-        if(ListID == null || newName == null || error) throw Error;
+        if(ListID == null || newName == null || error) throw new Error();
 
         await client.list.update({
 

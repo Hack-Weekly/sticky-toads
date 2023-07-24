@@ -6,8 +6,8 @@ export async function createList(ProjID: string, Title: string){
 
     try{
 
-        const {data, error} = await supabase.auth.getSession();
-        if(ProjID == null || Title == null || error) throw Error;
+        const {error} = await supabase.auth.getSession();
+        if(ProjID == null || Title == null || error) throw new Error();
 
 
 
