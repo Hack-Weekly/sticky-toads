@@ -1,15 +1,14 @@
-import { supabase, returnUserSession } from "../../supabase"
+import { supabase, checkSession } from "../../../supabase"
 
 export default defineEventHandler(async (event) => {
-  const { user } = await returnUserSession()
-  if (!user) return sendRedirect(event, '/', 403)
   try {
+    await checkSession(event)
     const { error } = await supabase.auth.signOut()
     if (error) throw error
     console.log('User Signed Out')
   } catch (err) {
     console.log(err)
   } finally {
-    return await sendRedirect(event, '/client/auth/sign-up', 403)
+      return await sendRedirect(event, '/test/sign-in', 301)
   }
 })

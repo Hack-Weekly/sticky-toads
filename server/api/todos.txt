@@ -6,3 +6,12 @@ Keep track of the users assigned to card, before that tho I need to revise the s
 
 ---
 
+Create middleware that automatically checks on certain endpoints wether or not a user session is active
+if not then error handle accordingly by throwing a 'User Session Not Found Error' or Redirect. 
+
+---
+
+Error handling has been improved to an extent, but I couldnt do much tonight so I will continue in the morning.
+
+---
+
