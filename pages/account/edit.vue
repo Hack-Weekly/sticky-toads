@@ -7,8 +7,8 @@
                         <h1 class="text-3xl font-bold text-center text-gray-100 pb-3">Edit your account info</h1>
                         <div class="pt-8 text-base font-semibold leading-7">
                             <form @submit.prevent="onSubmit">
-                                <div class="flex flex-row gap-x-3">
-                                    <div class="space-y-4 text-white w-1/2">
+                                <div class="flex flex-col md:flex-row gap-x-3">
+                                    <div class="space-y-4 text-white w-full md:w-1/2">
                                         <div>
                                             <label for="username" class="">Username</label>
                                             <FormDefaultInput id="username" type="text" name="username" placeholder="Enter a username..." />
@@ -31,7 +31,7 @@
                                         <img :src="picture" class="w-auto h-72 bg-cover mt-7"/>
                                     </template>
                                     <template v-else>
-                                        <div class="flex items-center justify-center w-1/2">
+                                        <div class="flex items-center justify-center w-full md:w-1/2">
                                             <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-72 mt-7 border-2 border-gray-500 border-dashed rounded-lg cursor-pointer hover:bg-primary transition duration-150">
                                                 <div class="flex flex-col items-center justify-center pt-5 pb-6">
                                                     <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
@@ -46,7 +46,7 @@
                                     </template>
                                     
                                 </div>
-                                <div class="flex flex-col md:flex-row items-center pt-5 gap-3 lg:gap-20 lg:ml-1">
+                                <div class="flex flex-col sm:flex-row items-center pt-5 gap-3 lg:gap-20 lg:ml-1">
                                     <button @click="state = !state" type="button" class="flex items-center justify-center px-4 py-2 text-base font-semibold rounded-md text-white bg-red-600 hover:bg-red-700 transition duration-150">
                                         Delete Account
                                     </button>
