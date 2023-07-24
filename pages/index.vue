@@ -4,6 +4,9 @@
     </div>
 </template>
 <script setup lang="ts">
+  definePageMeta({
+    middleware: 'session'
+  })
 </script>
 <style scoped>
 .rainbow {

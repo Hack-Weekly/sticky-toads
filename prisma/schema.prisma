@@ -49,7 +49,7 @@ model Label {
 model Card {
   id String  @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Text
   list_id String
-  card_label_id String
+  card_label_id String?
   list List  @relation(fields: [list_id], references: [id], onDelete: Cascade)
   card_label Card_Label[]
   title String
