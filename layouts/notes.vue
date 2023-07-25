@@ -1,5 +1,18 @@
 <template>
-    <div class="flex">
+    <div class="flex relative">
+
+        <div class="add-note w-full h-full absolute top-0 left-0 bg-black/75 flex justify-center items-center z-30" v-if="isBtn">
+            <form class="p-8 bg-zinc-800/100 relative w-96 rounded-md border border-white/10 flex flex-col justify-center items-center gap-2">
+                <span class="bg-rose-500 rounded-full absolute top-0 right-0 flex justify-center items-center translate-x-2/4 -translate-y-2/4 h-8 w-8 text-white transition-all duration-300 hover:scale-95" @click=toggle_btn>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </span>
+                <FormDefaultInput id="note_name" type="text" name="note_name" placeholder="note name..."/>
+                <textarea name="note_description" id="note_description" cols="30" rows="10" placeholder="note description..." class="block w-full shadow-sm focus:ring-0 sm:text-sm border border-gray-700 bg-primary py-2 px-3 rounded-md"></textarea>
+                <input type="submit" value="Create" class="block w-full shadow-sm focus:ring-0 sm:text-sm border border-cyan-700 py-2 px-3 rounded-md font-semibold bg-cyan-400 mt-1.5 transition-all duration-300 hover:scale-95">
+            </form>
+        </div>
 
         <div class="side-bar w-80 h-screen bg-gray-800 border-gray-700 border-r">
             
@@ -7,7 +20,7 @@
                 <div class="p-1 border-2 border-cyan-500 rounded-full flex justify-center items-center">
                     <img src="https://media.tenor.com/O3i0RscRs88AAAAC/anime-girl-anime.gif" alt="user-img" class="w-10 h-10 rounded-full">
                 </div>
-                <p class="text-white"> MasterOfAlune </p>
+                <p class="text-white"> MasterOfAlune</p>
             </div>
 
             <div class="w-full border-b h-16 border-gray-700 flex justify-between items-center px-4">
@@ -39,7 +52,7 @@
                         <input type="text" class="w-full max-w-[325px] min-w-[325px] outline-none shadow-sm focus:ring-0 sm:text-sm border border-gray-700 bg-primary py-2 rounded-md pl-10 pr-2" placeholder="search Porject">
                         <button class="py2 px-4 text-white transition-all duration-300 hover:text-cyan-400"> Search </button>
                     </div>
-                    <ButtonPrimary text="Add new note" type="button" class="cursor-pointer"/>
+                    <ButtonPrimary text="Add new note" type="button" @click=toggle_btn />
                 </div>
 
             </div>
@@ -54,4 +67,11 @@
 </template>
 
 <script setup lang="ts">
+
+    const isBtn = ref(false)
+
+    const toggle_btn = () => {
+        isBtn.value = !isBtn.value
+    }
+
 </script>
