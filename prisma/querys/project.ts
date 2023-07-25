@@ -1,6 +1,5 @@
 import { client } from "../client"
 import { queryHandler } from "./handler"
-import { Card } from "../../interfaces"
 // projects
 
 export async function createProject (userId: string, projectName: string) {
@@ -106,25 +105,4 @@ export async function retrieveProject(projectId: string) {
   if (error) throw error
 
   return returned
-}
-
-// instead of object create an interface that can take a set of predefined types or something
-// this way we can make sure that the correct data is inserted within the argument
-
-export async function createCard (cardData: Card, listId: string) {
-  const { error } = await queryHandler('Failed To Create Card!', async () => {
-    const { title, description } = cardData
-    console.log(listId)
-    await client.card.create({
-      data: {
-        list: {
-          connect: { id: listId }
-        },
-        title,
-        description,
-      }
-    })
-  })
-
-  if (error) throw error
 }

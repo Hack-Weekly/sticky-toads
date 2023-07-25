@@ -56,8 +56,8 @@ model Card {
 
 model Card_Label {
   id       String @id @unique @default(dbgenerated("gen_random_uuid()"))
-  card_id  String
-  label_id String
+  card_id  String @unique
+  label_id String @unique
   card     Card   @relation(fields: [card_id], references: [id], onDelete: Cascade)
   label    Label  @relation(fields: [label_id], references: [id], onDelete: Cascade)
 
