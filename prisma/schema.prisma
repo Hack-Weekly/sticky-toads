@@ -12,8 +12,7 @@ model User_Identifier {
   id           String         @unique
   username     String
   user_project User_Project[]
-
-  @@map("user")
+  @@map("user_identifier")
 }
 
 model Project {
@@ -45,19 +44,20 @@ model Label {
 }
 
 model Card {
-  id            String       @id @unique @default(dbgenerated("gen_random_uuid()"))
-  list_id       String
-  card_label_id String
-  list          List         @relation(fields: [list_id], references: [id], onDelete: Cascade)
-  card_label    Card_Label[]
-
+  id String  @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Text
+  list_id String
+  card_label_id String?
+  list List  @relation(fields: [list_id], references: [id], onDelete: Cascade)
+  card_label Card_Label[]
+  title String
+  description String
   @@map("card")
 }
 
 model Card_Label {
   id       String @id @unique @default(dbgenerated("gen_random_uuid()"))
-  card_id  String
-  label_id String
+  card_id  String @unique
+  label_id String @unique
   card     Card   @relation(fields: [card_id], references: [id], onDelete: Cascade)
   label    Label  @relation(fields: [label_id], references: [id], onDelete: Cascade)
 
@@ -68,9 +68,8 @@ model User_Project {
   id         String          @id @unique @default(dbgenerated("gen_random_uuid()"))
   user_id    String
   project_id String
-  user_role  String          @unique
-  project    Project         @relation(fields: [project_id], references: [id], onDelete: Cascade)
-  user       User_Identifier @relation(fields: [user_id], references: [id], onDelete: Cascade)
-
+  user User_Identifier @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  user_role String? @unique
   @@map("user_project")
 }

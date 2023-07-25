@@ -1,0 +1,2 @@
+All I did here was migrate the functions from queries to querys, also implemented the error handler on them
+and have somewhat tested the functionality to get it ready for when we merge the frontend and backend.
