@@ -15,8 +15,8 @@
   const cards = ref([])
   const list = ref([])
   const route = useRoute()
-  const { pid } = route.params
-  const { data }: any = await useFetch(`/api/project/${pid}/retrieve`)
+  const { id } = route.params
+  const { data }: any = await useFetch(`/api/project/${id}/retrieve`)
   const lists = data._rawValue.list
   watch(() => route.query, async (value) => {
   console.log(value.liId)

@@ -23,8 +23,8 @@
                 </div>
                 <p class="text-white"> {{ username }} </p>
             </div>
-
-            <NuxtLink  :to="{ path: `/notes`, params: { pid: pid },  query: { liId: list.id }}" v-for="list in lists" class="cursor-pointer w-full border-b h-16 border-gray-700 flex justify-between items-center px-4">
+            <template v-if="lists">
+            <NuxtLink  :to="{ path: `/notes/${id}`,  query: { liId: list.id }}" v-for="list in lists" class="cursor-pointer w-full border-b h-16 border-gray-700 flex justify-between items-center px-4">
                 <div class="flex gap-x-4 justify-center items-center">
                     <span class="rounded-full w-4 h-4 bg-purple-600">
                     </span>
@@ -34,6 +34,10 @@
                     {{ list.card.length }}
                 </div>
             </NuxtLink>
+            </template>
+            <template v-else>
+                <div class="flex justify-center items-center mt-8 text-gray-400">No lists</div>
+            </template>
 
         </div>
         
@@ -82,16 +86,17 @@
 
     const route = useRoute()
     const { liId } = route.query
-    const { pid } = route.params
+    console.log(route.query)
+    const { id } = route.params
     watch(() => route.params, async (value) => {
-    console.log(value.pid)
-     const { data }: any = await useFetch(`/api/project/${value.pid}/retrieve`)
+    console.log(value.id)
+     const { data }: any = await useFetch(`/api/project/${value.id}/retrieve`)
      lists.value = data._rawValue.list
   }, { immediate: true, deep: true })
 
     async function createCard () {
       console.log(cardData.value)
-      $fetch(`/api/project/${pid}/update`, {
+      $fetch(`/api/project/${id}/update`, {
         method: 'POST',
         body: {
           'card_operation': 'create',
