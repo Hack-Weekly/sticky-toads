@@ -1,6 +1,6 @@
 import { client } from "../client";
 import { queryHandler } from "./handler";
-import { Label } from "../../interfaces";
+import { Label } from "../../types/interfaces/project";
 
 // still missing assigned users because this is a work in progress
 export async function createLabel (labelData: Label) {

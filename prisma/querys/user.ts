@@ -13,7 +13,8 @@ export async function updateUserIdentityUsername(userId: string, username: strin
 }
 
 export async function getAllUserData(userId: string) {
-  await client.user_Identifier.findUnique({
+  console.log(userId)
+  return await client.user_Identifier.findUnique({
     where: {
       id: userId
     },

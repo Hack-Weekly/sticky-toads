@@ -84,7 +84,7 @@ export async function deleteProjectList (projectId: string, listId: string) {
   if (error) throw error
 }
 
-export async function retrieveProject(projectId: string) {
+export async function retrieveProject (projectId: string) {
   const { error, returned } = await queryHandler('Failed To Retrieve Project!', async () => {
     const project = await client.project.findUnique({
       where: {

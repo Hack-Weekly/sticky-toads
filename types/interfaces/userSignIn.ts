@@ -1,4 +1,4 @@
 export default interface userSignIn {
-    username: string;
+    email: string;
     password: string;
 }

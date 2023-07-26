@@ -62,10 +62,17 @@ const { handleSubmit } = useForm<userSignUp>({
   validationSchema: schema
 });
 
-const onSubmit = handleSubmit((values) => {
+const onSubmit = handleSubmit(async (values) => {
   alert(JSON.stringify(values, null, 2));
+  const { data: response } =  await useFetch('/api/auth/sign-up', {
+      onRequest({ request, options }) {
+      options.method = 'POST'
+      options.headers = { "Content-type": "application/json" };
+      options.body = JSON.stringify({ email: values.email, username: values.username, password: values.password })
+    }
+  })
 
-  /* Bionic make your API call here */
+  navigateTo('/sign-in')
 });
 
 definePageMeta({

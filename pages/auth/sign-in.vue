@@ -9,8 +9,8 @@
                             <form @submit.prevent="onSubmit">
                                 <div class="space-y-4 text-white">
                                     <div>
-                                        <label for="name" class="">Username</label>
-                                        <FormDefaultInput id="username" type="text" name="username" placeholder="Enter your username..." />
+                                        <label for="email" class="">Email</label>
+                                        <FormDefaultInput id="email" type="email" name="email" placeholder="Enter your email..." />
                                     </div>
                                     <div>
                                         <label for="password" class="">Password</label>
@@ -38,9 +38,8 @@
 import { useForm } from 'vee-validate';
 import userSignIn from '../../types/interfaces/userSignIn';
 import * as yup from 'yup';
-
 const schema = yup.object({
-  username: yup.string().required('Username is required'),
+  email: yup.string().email().required('email is required'),
   password: yup.string().required('Password is required')
 });
 
@@ -48,14 +47,34 @@ const { handleSubmit } = useForm<userSignIn>({
   validationSchema: schema
 });
 
-const onSubmit = handleSubmit((values) => {
+const onSubmit = handleSubmit(async (values) => {
   alert(JSON.stringify(values, null, 2));
-
   /* Bionic make your API call here */
+  const { data: response } =  await useFetch('/api/auth/sign-in', {
+      onRequest({ request, options }) {
+      options.method = 'POST'
+      options.headers = { "Content-type": "application/json" };
+      options.body = JSON.stringify({ email: values.email, password: values.password })
+    }
+  })
+  // @ts-ignore
+  const authToken = response._rawValue.auth_token
+  console.log(authToken)
+  if (authToken) {
+    sessionStorage.setItem('auth_token', authToken)
+    navigateTo('/projects')
+  } else {
+    const res = await fetch('/api/auth/sign-out')
+    const message = await res.text()
+    alert(message)
+  }
+
+
 });
 
 definePageMeta({
-  layout: false // exclude the default layout
-})
+  layout: false, // exclude the default layout
+  middleware: 'session'
+ })
 
 </script>

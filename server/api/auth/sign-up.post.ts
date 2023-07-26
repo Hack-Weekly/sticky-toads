@@ -8,7 +8,6 @@ export default defineEventHandler(async (event) => {
   const email = body.email
   const username = body.username
   const password = body.password
-  await isUserSession(sendRedirect(event, '/client/mainContent', 301))
   try {
     const { data, error } = await supabase.auth.signUp({
       email,

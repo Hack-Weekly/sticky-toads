@@ -2,7 +2,7 @@ import { checkSession } from "../../../../supabase"
 import { createProjectList, updateProjectName, updateProjectList, deleteProjectList } from '../../../../prisma/querys/project'
 import { createCard, removeCard } from "../../../../prisma/querys/card"
 import { attachCardAndLabel, createLabel, removeLabel, updateLabelColor, updateLabelTitle } from "../../../../prisma/querys/label"
-import { Card, Label } from '../../../../interfaces'
+import { Card, Label } from '../../../../types/interfaces/project'
 
 export default defineEventHandler(async (event) => {
   const { id }: any = event.context.params
@@ -83,7 +83,7 @@ export default defineEventHandler(async (event) => {
       break
      }
    }
-
+    
     res.end('Successfully Updated Project!')
   } catch (e) {
     console.log(`ERROR ON PROJECT UPDATE: ${e}`)

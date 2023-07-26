@@ -1,5 +1,4 @@
 import { createClient } from "@supabase/supabase-js";
-
 const config = useRuntimeConfig()
 const url: any = config.SUPABASE_URL
 //const anon_key: any = config.SUPABASE_ANON_KEY
@@ -22,10 +21,8 @@ export async function checkSession(event?: any) {
   const { user } = await returnUserSession()
   if (!user) {
     // dont know if its scuffed but with this we can run on the client and server
-    if (process.client) {
-      navigateTo('/test/sign-up')
-    } else if (process.server) {
-      await sendRedirect(event, '/test/sign-up', 401)
+    if (process.server) {
+      return { user: 'No User Was Found Try Again!' }
     }
   }
   return { user }
@@ -35,9 +32,11 @@ export async function isUserSession(method: any) {
   const { user } = await returnUserSession()
 
   if (user) {
-    method
+    method()
+    console.log('there is an active user session')
     return { user }
   }
+  console.log('there was no active users')
 }
 
 export async function updateUserInfo(attributesObj: any) {

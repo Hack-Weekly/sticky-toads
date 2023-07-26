@@ -1,5 +1,5 @@
 import { client } from "../client"
-import { Card } from "interfaces"
+import { Card } from "../../types/interfaces/project"
 import { queryHandler } from "./handler"
 
 export async function createCard (cardData: Card, listId: string) {

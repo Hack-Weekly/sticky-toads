@@ -8,7 +8,6 @@ export default defineEventHandler(async (event) => {
     console.log('User Signed Out')
   } catch (err) {
     console.log(err)
-  } finally {
-      return await sendRedirect(event, '/test/sign-in', 301)
+    throw Error('Error On User Sign Out!')
   }
 })

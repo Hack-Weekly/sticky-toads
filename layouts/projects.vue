@@ -2,7 +2,7 @@
     <div class="flex relative">
 
         <div class="add-project w-full h-full absolute top-0 left-0 bg-black/75 flex justify-center items-center z-30" v-if="isBtn">
-            <form class="p-8 bg-zinc-800/100 relative w-96 rounded-md border border-white/10 flex flex-col justify-center items-center gap-2">
+            <form @submit.prevent="createProject" class="p-8 bg-zinc-800/100 relative w-96 rounded-md border border-white/10 flex flex-col justify-center items-center gap-2">
                 <span class="bg-rose-500 rounded-full absolute top-0 right-0 flex justify-center items-center translate-x-2/4 -translate-y-2/4 h-8 w-8 text-white transition-all duration-300 hover:scale-95" @click=toggle_btn>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -19,7 +19,7 @@
                 <div class="p-1 border-2 border-cyan-500 rounded-full flex justify-center items-center">
                     <img src="https://media.tenor.com/O3i0RscRs88AAAAC/anime-girl-anime.gif" alt="user-img" class="w-10 h-10 rounded-full">
                 </div>
-                <p class="text-white"> MasterOfAlune </p>
+                <p class="text-white"> {{ username }} </p>
             </div>
 
         </div>
@@ -61,5 +61,10 @@
     const toggle_btn = () => {
         isBtn.value = !isBtn.value
     }
+    const username = ref('')
+
+    const { data: user }: any = await useFetch('/api/auth/retrieve')
+    username.value = user._rawValue.user.username
 
 </script>
+
