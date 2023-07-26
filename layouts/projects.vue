@@ -2,14 +2,14 @@
     <div class="flex relative">
 
         <div class="add-project w-full h-full absolute top-0 left-0 bg-black/75 flex justify-center items-center z-30" v-if="isBtn">
-            <form @submit.prevent="createProject" class="p-8 bg-zinc-800/100 relative w-96 rounded-md border border-white/10 flex flex-col justify-center items-center gap-2">
+            <form @submit.prevent="onSubmit" class="p-8 bg-zinc-800/100 relative w-96 rounded-md border border-white/10 flex flex-col justify-center items-center gap-2">
                 <span class="bg-rose-500 rounded-full absolute top-0 right-0 flex justify-center items-center translate-x-2/4 -translate-y-2/4 h-8 w-8 text-white transition-all duration-300 hover:scale-95" @click=toggle_btn>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </span>
                 <FormDefaultInput id="project_name" type="text" name="project_name" placeholder="project name..."/>
-                <input type="submit" value="Create" class="block w-full shadow-sm focus:ring-0 sm:text-sm border border-cyan-700 py-2 px-3 rounded-md font-semibold bg-cyan-400 mt-1.5 transition-all duration-300 hover:scale-95">
+                <button type="submit" class="block w-full shadow-sm focus:ring-0 sm:text-sm border border-cyan-700 py-2 px-3 rounded-md font-semibold bg-cyan-400 mt-1.5 transition-all duration-300 hover:scale-95">Create</button>
             </form>
         </div>
 
@@ -55,8 +55,14 @@
 </template>
 
 <script setup lang="ts">
+    import { useForm } from 'vee-validate';
+    import * as yup from 'yup';
+    const schema = yup.object({
+     project_name: yup.string().required('Project name is required!'),
+   });
 
     const isBtn = ref(false)
+    const projectName = ref('')
 
     const toggle_btn = () => {
         isBtn.value = !isBtn.value
@@ -65,6 +71,21 @@
 
     const { data: user }: any = await useFetch('/api/auth/retrieve')
     username.value = user._rawValue.user.username
+   const { handleSubmit } = useForm({
+     validationSchema: schema
+   });
 
+ const onSubmit = handleSubmit(async (values) => {
+    console.log(values.project_name)
+    const { data: response } =  await useFetch('/api/project/create', {
+      onRequest({ request, options }) {
+      options.method = 'POST'
+      options.headers = { "Content-type": "application/json" };
+      options.body = JSON.stringify({ project_name: values.project_name })
+    }
+  })
+
+  console.log(response.value)
+})
 </script>
 

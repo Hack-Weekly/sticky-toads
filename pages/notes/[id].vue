@@ -11,7 +11,6 @@
     layout: 'notes',
     middleware: 'session'
   })
-  const notes = ref('notes')
   const cards = ref([])
   const list = ref([])
   const route = useRoute()

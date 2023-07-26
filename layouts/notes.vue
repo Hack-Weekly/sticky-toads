@@ -95,7 +95,6 @@
   }, { immediate: true, deep: true })
 
     async function createCard () {
-      console.log(cardData.value)
       $fetch(`/api/project/${id}/update`, {
         method: 'POST',
         body: {

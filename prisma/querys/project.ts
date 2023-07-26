@@ -12,13 +12,17 @@ export async function createProject (userId: string, projectName: string) {
           },
           project: {
             create: {
-              name: projectName
+              name: projectName,
+              list: {
+                create: {
+                  title: 'My List'
+                }
+              }
             }
           }
         },
       })
     })
-
     if (error) throw error
 }
 

@@ -5,6 +5,7 @@ export default defineEventHandler(async (event) => {
   const { res } = event.node
   const body = await readBody(event)
   const projectName = body.project_name
+  console.log(projectName)
   try {
     const { user }: any = await checkSession(event)
     await createProject(user.id, projectName)
