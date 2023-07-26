@@ -1,5 +1,5 @@
 <template>
-    <div @click="goto" class="project-card cursor-pointer w-96 h-36 rounded-lg p-4 flex flex-col justify-center items-center gap-y-4 bg-zinc-950 bg-[url('/projectCardImg.jpg')] bg-cover">
+    <NuxtLink :to="`/notes/${props.id}`" class="project-card cursor-pointer w-96 h-36 rounded-lg p-4 flex flex-col justify-center items-center gap-y-4 bg-zinc-950 bg-[url('/projectCardImg.jpg')] bg-cover">
 
         <div class="text-white w-full rounded-lg flex justify-start gap-x-2 items-center">
             <p class="text-2xl font-semibold"> {{ title }} </p>
@@ -15,13 +15,9 @@
             <img src="https://wallpapers-clan.com/wp-content/uploads/2022/12/anime-eyes-gif-pfp-3.gif" alt="user-img" class="w-14 h-14 rounded-full object-cover">
         </div>
 
-    </div>
+    </NuxtLink>
 </template>
 
 <script setup lang="ts">
   const props = defineProps(['title', 'id', 'image', 'anchor'])
-
-  function goto () {
-    navigateTo(`/notes?pid=${props.id}`)
-  }
 </script>

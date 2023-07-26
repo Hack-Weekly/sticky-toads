@@ -4,8 +4,8 @@ import { retrieveProject } from "../../../../prisma/querys/project";
 export default defineEventHandler(async (event) => {
   const { res } = event.node
   const { id }: any = event.context.params
-
   try {
+    console.log(id)
     await checkSession(event)
     const project = await retrieveProject(id)
     return project

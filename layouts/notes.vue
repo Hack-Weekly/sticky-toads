@@ -24,7 +24,7 @@
                 <p class="text-white"> {{ username }} </p>
             </div>
 
-            <div @click="gotoList(list.id)" v-for="list in lists" class="cursor-pointer w-full border-b h-16 border-gray-700 flex justify-between items-center px-4">
+            <NuxtLink  :to="{ path: `/notes`, params: { pid: pid },  query: { liId: list.id }}" v-for="list in lists" class="cursor-pointer w-full border-b h-16 border-gray-700 flex justify-between items-center px-4">
                 <div class="flex gap-x-4 justify-center items-center">
                     <span class="rounded-full w-4 h-4 bg-purple-600">
                     </span>
@@ -33,7 +33,7 @@
                 <div class="py-1 px-3 text-center rounded-2xl text-white bg-purple-600 border-2 border-purple-500">
                     {{ list.card.length }}
                 </div>
-            </div>
+            </NuxtLink>
 
         </div>
         
@@ -68,8 +68,9 @@
 </template>
 
 <script setup lang="ts">
+    import { watch, ref } from 'vue'
     const isBtn = ref(false)
-
+    const lists = ref(false)
     const toggle_btn = () => {
         isBtn.value = !isBtn.value
     }
@@ -80,14 +81,13 @@
     username.value = user._rawValue.user.username
 
     const route = useRoute()
-    const { pid, liId } = route.query
-   
-    const { data }: any = await useFetch(`/api/project/${pid}/retrieve`)
-    let lists = data._rawValue.list
-
-    async function gotoList(id: string) {
-    await  navigateTo(`/notes/?pid=${pid}&liId=${id}`)
-    }
+    const { liId } = route.query
+    const { pid } = route.params
+    watch(() => route.params, async (value) => {
+    console.log(value.pid)
+     const { data }: any = await useFetch(`/api/project/${value.pid}/retrieve`)
+     lists.value = data._rawValue.list
+  }, { immediate: true, deep: true })
 
     async function createCard () {
       console.log(cardData.value)

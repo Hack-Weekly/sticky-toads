@@ -72,7 +72,7 @@ const onSubmit = handleSubmit(async (values) => {
     }
   })
 
-  navigateTo('/sign-in')
+  navigateTo('/auth/sign-in')
 });
 
 definePageMeta({
