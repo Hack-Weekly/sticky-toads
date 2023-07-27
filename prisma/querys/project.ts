@@ -15,7 +15,7 @@ export async function createProject (userId: string, projectName: string) {
               name: projectName,
               list: {
                 create: {
-                  title: 'My List'
+                  title: 'My List',
                 }
               }
             }

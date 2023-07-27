@@ -1,6 +1,6 @@
 <template>
-    <NuxtLink :to="`/notes/${props.id}`" class="project-card cursor-pointer w-96 h-36 rounded-lg p-4 flex flex-col justify-center items-center gap-y-4 bg-zinc-950 bg-[url('/projectCardImg.jpg')] bg-cover">
-
+       <a :href="removeLink" class='text-red-500'>Remove</a>
+    <NuxtLink :to="`/notes/${props.id}`" class="project-card mx-3 cursor-pointer w-96 h-36 rounded-lg p-4 flex flex-col justify-center items-center gap-y-4 bg-zinc-950 bg-[url('/projectCardImg.jpg')] bg-cover">
         <div class="text-white w-full rounded-lg flex justify-start gap-x-2 items-center">
             <p class="text-2xl font-semibold"> {{ title }} </p>
             <div class="text-sm py-0.5 px-3 bg-white rounded-md text-gray-800">
@@ -20,4 +20,5 @@
 
 <script setup lang="ts">
   const props = defineProps(['title', 'id', 'image', 'anchor'])
+  const removeLink = ref(`/api/project/${props.id}/delete`)
 </script>
