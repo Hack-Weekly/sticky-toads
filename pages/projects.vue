@@ -1,11 +1,11 @@
 <template>
-    <div class="p-8 flex flex-wrap">
-        <CardProject v-for="userProject in projects" :title="userProject.project.name" :id="userProject.project.id"/>
+    <div class="p-4 flex h-full flex-wrap justify-center items-center gap-4">
+        <CardProject v-for="userProject in projects" :title="userProject.project.name" :id="userProject.project.id" :key="userProject.project.id"/>
     </div>
 </template>
 
 <script setup lang="ts">
-  const projects = ref(false)
+  const projects = useState('projects')
   definePageMeta({
     layout: 'projects',
     middleware: 'session'
