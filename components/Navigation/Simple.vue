@@ -14,7 +14,7 @@
         <div class="w-auto">
           <div class="flex flex-wrap items-center gap-6">
             <div class="w-auto hidden lg:block">
-                <NuxtLink class="border-2 border-cyan-400 flex items-center gap-1 transition-colors ease-in-out duration-150 text-white font-bold py-3 px-3 w-26 rounded-md">
+                <NuxtLink to="/auth/sign-in" class="border-2 border-cyan-400 flex items-center gap-1 transition-colors ease-in-out duration-150 text-white font-bold py-3 px-3 w-26 rounded-md">
                     <span>Sign-in</span>  
                 </NuxtLink>   
             </div>
