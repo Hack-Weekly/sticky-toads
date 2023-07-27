@@ -67,11 +67,16 @@ import { useForm } from 'vee-validate';
 import userSignUp from '../../types/interfaces/userSignUp';
 import * as yup from 'yup';
 
+definePageMeta({
+  layout: 'account', // exclude the default layout
+  middleware: 'session'
+})
+
 const state = ref<Boolean>(false);
 
 const schema = yup.object({
-  username: yup.string().required('Username is required'),
-  email: yup.string().required('Email is required').email('Invalid email format'),
+  username: yup.string(),
+  email: yup.string().email('Invalid email format'),
   password: yup.string().min(6)
   .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
   .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
@@ -99,9 +104,15 @@ function onFileChange(event) {
     }
 }
 
-const onSubmit = handleSubmit((values) => {
-  alert(JSON.stringify(values, null, 2));
-
-  /* Bionic make your API call here */
+const onSubmit = handleSubmit(async(values) => {
+    /* Bionic make your API call here */
+    const { data: response } =  await useFetch('/api/auth/update', {
+        onRequest({ request, options }) {
+        options.method = 'POST'
+        options.headers = { "Content-type": "application/json" };
+        options.body = JSON.stringify(values)
+        }
+    })
+    // @ts-ignore
 });
 </script>

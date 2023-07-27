@@ -6,9 +6,9 @@ import { updateUserIdentityUsername } from "../../../prisma/querys/user";
 export default defineEventHandler(async (event) => {
   const { res } = event.node
   const body = await readBody(event)
-  const email = body.email
-  const password = body.password
-  const username = body.username
+  console.log(body)
+  const { username, email, password } = body
+  
   try {
       await checkSession(event)
       if (email && password) {
