@@ -6,6 +6,6 @@
 <style>
 body {
   background-color: #303030;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Lexend', sans-serif;
 }
 </style>

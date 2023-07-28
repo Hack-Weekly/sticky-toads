@@ -64,11 +64,9 @@ const onSubmit = handleSubmit(async (values) => {
     sessionStorage.setItem('auth_token', authToken)
     navigateTo('/projects')
   } else {
-    const res = await fetch('/api/auth/sign-out')
-    const message = await res.text()
-    alert(message)
+    await fetch('/api/auth/sign-out')
+    alert(response.value)
   }
-
 
 });
 

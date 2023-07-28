@@ -29,3 +29,17 @@ export async function removeCard(cardData: Card) {
 
   if (error) throw error
 }
+
+// work in progress
+
+export async function assignUserToCard ({ id }: Card) {
+  const { error } = await queryHandler('Failed To Assign User To Card!', async () => {
+    await client.card.update({
+      where: {
+        id
+      },
+    })
+  })
+
+  if (error) throw error
+}

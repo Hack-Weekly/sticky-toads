@@ -99,12 +99,34 @@ export async function retrieveProject (projectId: string) {
           include: {
             card: true
           }
+        },
+        user_project: {
+          select: {
+            user: true,
+          }
         }
       }
     })
 
     return project
   })
+
+  if (error) throw error
+
+  return returned
+}
+
+export async function addUserToProject (projectId: string, userId: string) {
+  const { error, returned } = await queryHandler('Failed To Add User To Project!', async () => updateProject({
+    id: projectId
+  },
+  {
+    user_project: {
+      create: {
+        user_id: userId
+      }
+    }
+  }))
 
   if (error) throw error
 
