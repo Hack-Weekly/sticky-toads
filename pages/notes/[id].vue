@@ -1,6 +1,6 @@
 <template>
-    <div class="p-8 flex flex-wrap">
-        <CardNote v-for="card in cards" :title="card.title" :description="card.description" :card_id="card.id"/>
+    <div class="p-4 flex h-full flex-wrap justify-start items-start gap-4">
+        <CardNote v-for="card in cards" :title="card.title" :description="card.description" :card_id="card.id" :key="card.id"/>
     </div>
 </template>
 
