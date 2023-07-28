@@ -7,13 +7,12 @@ async function updateUserIdentity (whereObj: any, dataObj: any) {
   })
 }
 
-export async function updateUserIdentityUsername(userId: string, username: string) {
+export async function updateUserIdentityUsername (userId: string, username: string) {
   if (!userId || !username) throw new Error('Id or Username is falsy, please try again!')
   await updateUserIdentity({ id: userId }, { username })
 }
 
-export async function getAllUserData(userId: string) {
-  console.log(userId)
+export async function getAllUserData (userId: string) {
   return await client.user_Identifier.findUnique({
     where: {
       id: userId

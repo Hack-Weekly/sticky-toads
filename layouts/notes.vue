@@ -110,20 +110,23 @@
     }
 
     const toggle_btn2 = () => isBtn2.value = !isBtn2.value
-
     const username = ref('')
     const cardData = ref({ title: '', description: '' })
     const id: any = ref('')
     const { data: user }: any = await useFetch('/api/auth/retrieve')
     username.value = user._rawValue.user.username
 
+    const retrieveProjectData = async (project_id: any) => {
+      const { data }: any = await useFetch(`/api/project/${project_id}/retrieve`)
+      lists.value = data._rawValue.list
+    }
+
     const route = useRoute()
     const { liId } = route.query
     console.log(route.query)
     watch(() => route.params, async (value) => {
     id.value = value.id
-     const { data }: any = await useFetch(`/api/project/${value.id}/retrieve`)
-     lists.value = data._rawValue.list
+    await retrieveProjectData(value.id)
   }, { immediate: true, deep: true })
 
     async function createCard () {
@@ -139,8 +142,10 @@
 
         }
       })
+
+      await retrieveProjectData(id)
     }
-  
+
 
   ///////////////////////////////////////////////////////////////////////
    const { handleSubmit } = useForm({
@@ -157,7 +162,8 @@
         list_title: values.list_title, })
       }
     })
-    console.log(response)
+    await retrieveProjectData(id.value)
+    console.log(lists.value)
   })
 
   const removeList = async (listId: string) => {
@@ -168,5 +174,8 @@
         'list_id': listId,
       }
     })
+
+    await retrieveProjectData(id.value)
+
   }
 </script>

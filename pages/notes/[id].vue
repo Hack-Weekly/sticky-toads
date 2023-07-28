@@ -18,9 +18,7 @@
   const { data }: any = await useFetch(`/api/project/${id}/retrieve`)
   const lists = data._rawValue.list
   watch(() => route.query, async (value) => {
-  console.log('hi')
     if (value.liId) {
-    console.log(value.liId)
     // @ts-ignore
     list.value = lists.filter(l => l.id === value.liId)
     cards.value = list.value[0].card
