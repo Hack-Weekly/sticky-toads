@@ -12,6 +12,7 @@ model User_Identifier {
   id           String         @unique
   username     String
   user_project User_Project[]
+  card_assignments Card_Assignments[]
   @@map("user_identifier")
 }
 
@@ -51,6 +52,8 @@ model Card {
   card_label Card_Label[]
   title String
   description String
+  creation_date DateTime @default(now())
+  assigned_users Card_Assignments[]
   @@map("card")
 }
 
@@ -62,6 +65,15 @@ model Card_Label {
   label    Label  @relation(fields: [label_id], references: [id], onDelete: Cascade)
 
   @@map("card_label")
+}
+
+model Card_Assignments {
+  id String @id @unique @default(dbgenerated("gen_random_uuid()"))
+  card_id String @unique
+  user_id String @unique
+  card Card @relation(fields: [card_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user User_Identifier @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // if somehow the relations are shit then i will use project_id from user_project or project tables/models
 }
 
 model User_Project {

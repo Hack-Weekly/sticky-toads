@@ -1,5 +1,5 @@
 import { createProjectList, deleteProjectList, updateProjectList } from "../../prisma/querys/project"
-import { createCard, removeCard } from "../../prisma/querys/card"
+import { assignUserToCard, createCard, removeCard } from "../../prisma/querys/card"
 import { createLabel, attachCardAndLabel, updateLabelColor, updateLabelTitle, removeLabel } from "../../prisma/querys/label"
 import { ListActions, CardActions, LabelActions } from "../../types/interfaces/actions"
 
@@ -28,8 +28,8 @@ export const cardActionsMap: { [operation: string]: Function } = {
   'delete': async ({ card }: CardActions) => {
     await removeCard(card)
   },
-  'adduser': async ({  }) => {
-
+  'adduser': async ({ card }: CardActions) => {
+    await assignUserToCard(card)
   }
 }
 // this can be refactored on the query side overall shits pretty clean

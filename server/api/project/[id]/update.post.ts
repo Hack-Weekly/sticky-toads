@@ -43,11 +43,11 @@ export default defineEventHandler(async (event) => {
       await labelActions({ list_id, label: labelData })
     }
 
-     if (card) {
-       const cardData: Card = { id: card.id, title: card.title, description: card.description }
-       const cardActions = cardActionsMap[card_operation]
-       await cardActions({ list_id, card: cardData })
-     }
+    if (card) {
+      const cardData: Card = { id: card.id, title: card.title, description: card.description, assigned_id: card.assigned_id }
+      const cardActions = cardActionsMap[card_operation]
+      await cardActions({ list_id, card: cardData })
+    }
 
     res.end('Successfully Updated Project!')
   } catch (e) {
