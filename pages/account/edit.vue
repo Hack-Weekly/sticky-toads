@@ -40,7 +40,7 @@
                                                     <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
                                                     <p class="text-xs text-gray-500">SVG, PNG, JPG or GIF</p>
                                                 </div>
-                                                <input @change="onFileChange" accept="image/*" id="dropzone-file" type="file" class="hidden" />
+                                                <input @change="onFileChange" accept="image/*" id="dropzone-file" type="file" class="hidden" name="picture"/>
                                             </label>
                                         </div> 
                                     </template>
@@ -64,7 +64,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useForm } from 'vee-validate';
-import userSignUp from '../../types/interfaces/userSignUp';
+import accountUpdate from '../../types/interfaces/accountUpdate';
 import * as yup from 'yup';
 
 definePageMeta({
@@ -82,25 +82,33 @@ const schema = yup.object({
   .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
   .matches(/[0-9]/, 'Password must contain at least one number'),
   passwordConfirm: yup.string().min(6).oneOf([yup.ref('password')], 'Passwords must match'),
+
 });
 
-const { handleSubmit } = useForm<userSignUp>({
+const { handleSubmit } = useForm<accountUpdate>({
   validationSchema: schema
 });
 
-const picture = ref(null);
+const picture = ref('');
+const fileInformation = ref({})
 
 function onFileChange(event) {
     const file = event.target.files[0];
+    const information = {
+        name: event.target.files[0].name,
+        type: event.target.files[0].type,
+    }
+    fileInformation.value = information;
+    // console.log(fileInformation.value)
     if (file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-            const result = reader.result;
-            if (result) {
-                picture.value = result;
-            }
-            reader.readAsDataURL(file);
+    	const reader = new FileReader();
+		reader.onload = () => {
+			const result = reader.result;
+			if (typeof result === 'string') {
+				picture.value = result;
+		    };
         }
+        reader.readAsDataURL(file);
     }
 }
 
@@ -110,7 +118,14 @@ const onSubmit = handleSubmit(async(values) => {
         onRequest({ request, options }) {
         options.method = 'POST'
         options.headers = { "Content-type": "application/json" };
-        options.body = JSON.stringify(values)
+        options.body = {
+            values: values,
+            picture: { 
+                file: picture.value,
+                information: fileInformation.value
+            }
+            // picture: picture.value
+        }
         }
     })
     // @ts-ignore

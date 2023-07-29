@@ -24,7 +24,7 @@
             <div class="current-user w-full h-16 border-b border-gray-700 flex gap-x-4 justify-center items-center">
 
                 <div @click="visible = !visible" class="p-1 border-2 min-w-[40px] min-h-[40px] border-cyan-500 rounded-full flex justify-center items-center">
-                    <img src="https://media.tenor.com/O3i0RscRs88AAAAC/anime-girl-anime.gif" alt="user-img" class="w-10 h-10 rounded-full">
+                    <img :src="profilePic ? profilePic : 'https://media.tenor.com/O3i0RscRs88AAAAC/anime-girl-anime.gif'" alt="user-img" class="w-10 h-10 rounded-full">
                 </div>
 
                 <p class="text-white"> {{ username }} </p>
@@ -114,12 +114,16 @@
         isBtn.value = !isBtn.value
     }
     const username = ref('')
+    const profilePic = ref('')
 
     const { data: user }: any = await useFetch('/api/auth/retrieve')
     username.value = user._rawValue.user.username
-   const { handleSubmit } = useForm({
-     validationSchema: schema
-   });
+    console.log(user)
+    profilePic.value = user._rawValue.picture
+
+    const { handleSubmit } = useForm({
+        validationSchema: schema
+    });
 
  const onSubmit = handleSubmit(async (values) => {
     console.log(values.project_name)

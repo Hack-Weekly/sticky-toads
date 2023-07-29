@@ -47,3 +47,50 @@ export async function updateUserInfo(attributesObj: any) {
 
   return { user }
 }
+
+export async function updatePicture(fileName: string, picture: any) {
+  const { data, error } = await supabase.storage.from('profile').upload(`public/${fileName}`, picture, {
+    cacheControl: '3600',
+    upsert: true,
+  })
+  await signPictureUrl(fileName)
+  if (error) throw error
+  console.log(`Uploaded ${fileName}`)
+}
+
+export async function signPictureUrl(fileName: string) {
+  const oneYear = 60 * 60 * 24 * 365;
+
+  const { data, error } = await supabase.storage.from('profile').createSignedUrl(`public/${fileName}`, oneYear)
+
+  if (error) throw error
+  console.log(`Signed Url ${data}`)
+  return data
+}
+
+export async function getSignedUrl(userId: string) {
+  let picture;
+  const { data, error } = await supabase.storage.from("profile").list("public");
+
+  if (error) {
+      console.error("Error retrieving files:", error.message);
+  } else {
+      // `data` contains an array of file objects
+      // You can use this array to find the file with the desired user ID and extension
+      const file = data.find((file) => {
+          const [name, ext] = file.name.split(".");
+          return name === userId && ["png", "svg", "jpg", "gif"].includes(ext);
+      });
+      if (file) {
+          // `file` contains the file object for the desired file
+          // You can use `file.name` to get the name of the file
+          const { data } = supabase.storage.from("profile").getPublicUrl(`public/${file.name}`);
+          // console.log(data.publicUrl);
+          picture = data.publicUrl;
+      } else {
+          console.error("File not found");
+      }
+  }
+
+  return picture
+}
