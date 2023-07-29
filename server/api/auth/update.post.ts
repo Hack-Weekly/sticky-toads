@@ -40,19 +40,11 @@ export default defineEventHandler(async (event) => {
           await updateUserIdentityUsername(user.id, username)
         },
         picture: async () => {
-          // const buffer = Buffer.from(file, 'base64');
+          //const buffer = Buffer.from(file, 'base64url');
           const fileExtension = information.name.substr(information.name.lastIndexOf('.'));
-          const newFileName = user.id + fileExtension;
-          // const contentType = 'image/' + fileExtension.substr(1);
-          const byteCharacters = atob(file);
-          const byteNumbers = new Array(byteCharacters.length);
-          for (let i = 0; i < byteCharacters.length; i++) {
-              byteNumbers[i] = byteCharacters.charCodeAt(i);
-          }
-          const byteArray = new Uint8Array(byteNumbers);
-          const blob = new Blob([byteArray], { type: `image/${fileExtension}` });
-
-          await updatePicture(newFileName, blob)
+         const newFileName = user.id + fileExtension;
+         const contentType = 'image/' + fileExtension.substr(1);
+          await updatePicture(newFileName, file, contentType)
         },
         all: async () => {
           await updateUserInfo({ email, password })

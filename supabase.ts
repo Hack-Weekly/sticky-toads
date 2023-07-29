@@ -48,10 +48,13 @@ export async function updateUserInfo(attributesObj: any) {
   return { user }
 }
 
-export async function updatePicture(fileName: string, picture: any) {
+export async function updatePicture(fileName: string, picture: any, type: any) {
+  console.log(fileName, picture)
+  console.log(type)
   const { data, error } = await supabase.storage.from('profile').upload(`public/${fileName}`, picture, {
     cacheControl: '3600',
     upsert: true,
+    contentType: type
   })
   await signPictureUrl(fileName)
   if (error) throw error
@@ -64,7 +67,7 @@ export async function signPictureUrl(fileName: string) {
   const { data, error } = await supabase.storage.from('profile').createSignedUrl(`public/${fileName}`, oneYear)
 
   if (error) throw error
-  console.log(`Signed Url ${data}`)
+  console.log(`Signed Url ${data.signedUrl}`)
   return data
 }
 

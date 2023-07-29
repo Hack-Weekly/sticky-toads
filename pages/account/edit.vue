@@ -113,7 +113,6 @@ function onFileChange(event) {
 }
 
 const onSubmit = handleSubmit(async(values) => {
-    /* Bionic make your API call here */
     const { data: response } =  await useFetch('/api/auth/update', {
         onRequest({ request, options }) {
         options.method = 'POST'
@@ -128,6 +127,5 @@ const onSubmit = handleSubmit(async(values) => {
         }
         }
     })
-    // @ts-ignore
 });
 </script>
