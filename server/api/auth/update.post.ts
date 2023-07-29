@@ -1,15 +1,21 @@
-import { supabase, checkSession, updateUserInfo } from "../../../supabase";
+import { supabase, checkSession, updateUserInfo, updatePicture } from "../../../supabase";
 import { updateUserIdentityUsername } from "../../../prisma/querys/user";
 import {object} from "yup";
 
 // will be properly tested once ui guys can build me a form since supabase adds the token to localstorage
 
+// OK Bionic, I am almost done
+
 export default defineEventHandler(async (event) => {
   const { res } = event.node
   const body = await readBody(event)
-  console.log(body)
-  const { username, email, password } = body
-  console.log(username, email, password)
+  const { username, email, password } = body.values
+  const { file, information } = body.picture
+
+
+
+  // console.log(file)
+  // console.log(information)
   const checkEmailMessage: string = `Verification email has been sent to new email of ${email}`
   try {
       const { user }: any = await checkSession(event)
@@ -33,13 +39,21 @@ export default defineEventHandler(async (event) => {
         username: async () => {
           await updateUserIdentityUsername(user.id, username)
         },
+        picture: async () => {
+          const buffer = Buffer.from(file, 'base64');
+          const fileExtension = information.name.substr(information.name.lastIndexOf('.'));
+          const newFileName = user.id + fileExtension;
+          await updatePicture(newFileName, buffer)
+        },
         all: async () => {
           await updateUserInfo({ email, password })
           await updateUserIdentityUsername(user.id, username)
+
           return checkEmailMessage
         }
       }
 
+      actions.picture()
       if (email && password) {
         actions.emailAndPassword()
       } else if (email && password && username) {
@@ -52,6 +66,8 @@ export default defineEventHandler(async (event) => {
         actions.username()
       } else if (password) {
         actions.password()
+      } else if (body.picture) {
+        actions.picture()
       }
 
   } catch (err) {
