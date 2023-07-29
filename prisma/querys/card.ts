@@ -5,7 +5,6 @@ import { queryHandler } from "./handler"
 export async function createCard (cardData: Card, listId: string) {
   const { error } = await queryHandler('Failed To Create Card!', async () => {
     const { title, description } = cardData
-    console.log(listId)
     await client.card.create({
       data: {
         list: {
@@ -19,8 +18,7 @@ export async function createCard (cardData: Card, listId: string) {
 
   if (error) throw error
 }
-export async function removeCard(cardData: Card) {
-  const { id } = cardData
+export async function removeCard({ id }: Card) {
   const { error } = await queryHandler('Failed To Remove Card!', async () => {
     await client.card.delete({
       where: { id }
@@ -32,12 +30,42 @@ export async function removeCard(cardData: Card) {
 
 // work in progress
 
-export async function assignUserToCard ({ id }: Card) {
+// these two functions below can be be rewritten to be wayyy shorter by making a higher order function
+// but bionic is supa lazy
+
+export async function assignUserToCard ({ id, assigned_id }: Card) {
   const { error } = await queryHandler('Failed To Assign User To Card!', async () => {
+    await client.card.update({
+      where: {
+        id,
+      },
+      data: {
+        assigned_users: {
+          create: {
+            user_id: assigned_id,
+          }
+        }
+      }
+    })
+  })
+
+  if (error) throw error
+  console.log(`User ${assigned_id} has been assigned to card ${id}`)
+}
+
+export async function unassignUserFromCard ({ id, assigned_id }: Card) {
+  const { error } = await queryHandler('Failed To Unassign User From Card!', async () => {
     await client.card.update({
       where: {
         id
       },
+      data: {
+        assigned_users: {
+          delete: {
+            user_id: assigned_id
+          }
+        }
+      }
     })
   })
 

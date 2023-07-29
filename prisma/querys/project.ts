@@ -97,7 +97,16 @@ export async function retrieveProject (projectId: string) {
       include: {
         list: {
           include: {
-            card: true
+            card: {
+              include: {
+                assigned_users: true,
+                card_label: {
+                  include: {
+                    label: true,
+                  }
+                }
+              }
+            }
           }
         },
         user_project: {

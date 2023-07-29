@@ -1,7 +1,12 @@
 import { createProjectList, deleteProjectList, updateProjectList } from "../../prisma/querys/project"
-import { createCard, removeCard } from "../../prisma/querys/card"
-import { createLabel, attachCardAndLabel, updateLabelColor, updateLabelTitle, removeLabel } from "../../prisma/querys/label"
+import { assignUserToCard, createCard, removeCard, unassignUserFromCard } from "../../prisma/querys/card"
+import { createLabel, attachCardAndLabel, updateLabelColor, updateLabelTitle, removeLabel, detachCardAndLabel } from "../../prisma/querys/label"
 import { ListActions, CardActions, LabelActions } from "../../types/interfaces/actions"
+
+// here in this actions, return the errors from the functions in a object if there is an error
+// then throw it above so that the update function can catch them, its kinda aids but it will be worth it
+// or idk maybe i get a better idea in the future.
+
 
 export const listActionsMap: { [operation: string]: Function } = {
   'create': async ({ list_title, project_id, message }: ListActions) => {
@@ -20,7 +25,8 @@ export const listActionsMap: { [operation: string]: Function } = {
 
 export const cardActionsMap: { [operation: string]: Function } = {
   'create': async ({ card, list_id }: CardActions) => {
-     await createCard(card, list_id)
+    if (!list_id) throw new Error('List id is required to perform this operation!')
+    await createCard(card, list_id)
   },
   'update': async ({  }) => {
 
@@ -28,8 +34,11 @@ export const cardActionsMap: { [operation: string]: Function } = {
   'delete': async ({ card }: CardActions) => {
     await removeCard(card)
   },
-  'adduser': async ({  }) => {
-
+  'add_user': async ({ card }: CardActions) => {
+    await assignUserToCard(card)
+  },
+  'remove_user': async ({ card }: CardActions) => {
+    await unassignUserFromCard(card)
   }
 }
 // this can be refactored on the query side overall shits pretty clean
@@ -52,6 +61,11 @@ export const labelActionsMap: { [operation: string]: Function } = {
   'attach': async ({ label, card_id }: LabelActions) => {
     if (card_id && label.id) {
       await attachCardAndLabel(card_id, label.id)
+    } else throw Error('Missing "id" for Card and Label...')
+  },
+  'detach': async ({ label, card_id }: LabelActions) => {
+    if (card_id && label.id) {
+      await detachCardAndLabel(card_id, label.id)
     } else throw Error('Missing "id" for Card and Label...')
   }
 }
