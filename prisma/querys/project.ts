@@ -99,7 +99,12 @@ export async function retrieveProject (projectId: string) {
           include: {
             card: {
               include: {
-                assigned_users: true
+                assigned_users: true,
+                card_label: {
+                  include: {
+                    label: true,
+                  }
+                }
               }
             }
           }

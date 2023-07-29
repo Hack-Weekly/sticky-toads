@@ -37,13 +37,13 @@ export default defineEventHandler(async (event) => {
       await listAction({ project_id: id, list_id, list_title, message: requiredTitleErrMssg })
     }
 
-    if (label) {
+    if (label && label_operation) {
       const labelData: Label = { id: label.id, title: label.title, color: label.color }
       const labelActions = labelActionsMap[label_operation]
-      await labelActions({ list_id, label: labelData })
+      await labelActions({ card_id: card ? card.id : '', label: labelData })
     }
 
-    if (card) {
+    if (card && card_operation) {
       const cardData: Card = { id: card.id, title: card.title, description: card.description, assigned_id: card.assigned_id }
       const cardActions = cardActionsMap[card_operation]
       await cardActions({ list_id, card: cardData })

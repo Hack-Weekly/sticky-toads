@@ -64,3 +64,14 @@ export async function attachCardAndLabel (cardId: string, labelId: string) {
 
   if (error) throw error
 }
+
+export async function detachCardAndLabel (cardId: string, labelId: string) {
+  const { error } = await queryHandler('Failed To Detach Card And Label', async () => await client.card_Label.delete({
+    where: {
+      card_id: cardId,
+      label_id: labelId
+    },
+  }))
+
+  if (error) throw error
+}
