@@ -59,10 +59,16 @@
         </div>
 
         <div class="flex gap-x-2 flex-warp">
-          <div class="card-type w-full max-w-fit flex justify-start items-center text-xs py-1 px-3 text-white bg-neutral-700/50 rounded-full">
+          <div class="card-type w-full gap-x-2 max-w-fit flex justify-start items-center text-xs py-1 px-3 text-white bg-neutral-700/50 rounded-full">
 
               <p> Work </p>
-          
+
+            <div class="transition-all duration-300 hover:text-rose-400">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </div>
+
           </div>
 
           <div class="card-type w-full max-w-fit flex justify-start items-center text-xs py-1 px-3 text-white bg-neutral-700/50 rounded-full">
