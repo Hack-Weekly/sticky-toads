@@ -2,30 +2,30 @@
   <div class="note-card-wrapper">
 
     <div class="update-model flex p-2 max-w-[260px] rounded-md border border-white/10 bg-[#1e1e1e] bg-center bg-cover mb-1 flex-col justify-center items-start" v-if="update_model">
-        <div class="h-10 gap-x-2 flex justify-center items-center rounded-md">
-            <input type="text" class="bg-gray-800 border h-8 border-white/10 rounded-md text-sm px-2 text-white outline-none" placeholder="update card title">
-            <button class="cursor-pointer min-w-[32px] min-h-[32px] h-8 rounded-md flex justify-center items-center border border-white/10 text-white transition-all duration-300 hover:text-cyan-400">
+        <form @submit.prevent="updateCardTitle" class="h-10 gap-x-2 flex justify-center items-center rounded-md">
+            <input v-model="newCardTitle" type="text" class="bg-gray-800 border h-8 border-white/10 rounded-md text-sm px-2 text-white outline-none" placeholder="update card title">
+            <button type="submit" class="cursor-pointer min-w-[32px] min-h-[32px] h-8 rounded-md flex justify-center items-center border border-white/10 text-white transition-all duration-300 hover:text-cyan-400">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                 </svg>
             </button>
-        </div>
-        <div class="h-10 gap-x-2 flex justify-center items-center rounded-md">
-            <input type="text" class="bg-gray-800 border h-8 border-white/10 rounded-md text-sm px-2 text-white outline-none" placeholder="add label to card">
-            <button class="cursor-pointer min-w-[32px] min-h-[32px] h-8 rounded-md flex justify-center items-center border border-white/10 text-white transition-all duration-300 hover:text-cyan-400">
+        </form>
+        <form @submit.prevent="attachCardLabel" class="h-10 gap-x-2 flex justify-center items-center rounded-md">
+            <input v-mode="cardLabelId" type="text" class="bg-gray-800 border h-8 border-white/10 rounded-md text-sm px-2 text-white outline-none" placeholder="add label to card">
+            <button type="submit" class="cursor-pointer min-w-[32px] min-h-[32px] h-8 rounded-md flex justify-center items-center border border-white/10 text-white transition-all duration-300 hover:text-cyan-400">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                 </svg>
             </button>
-        </div>
-        <div class="h-10 gap-x-2 flex justify-center items-center rounded-md">
-            <input type="text" class="bg-gray-800 border h-8 border-white/10 rounded-md text-sm px-2 text-white outline-none" placeholder="update card description">
-            <button class="cursor-pointer min-w-[32px] min-h-[32px] h-8 rounded-md flex justify-center items-center border border-white/10 text-white transition-all duration-300 hover:text-cyan-400">
+        </form>
+        <form @submit.prevent="updateCardDescription" class="h-10 gap-x-2 flex justify-center items-center rounded-md">
+            <input v-model="newCardDescription" type="text" class="bg-gray-800 border h-8 border-white/10 rounded-md text-sm px-2 text-white outline-none" placeholder="update card description">
+            <button type="submit" class="cursor-pointer min-w-[32px] min-h-[32px] h-8 rounded-md flex justify-center items-center border border-white/10 text-white transition-all duration-300 hover:text-cyan-400">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                 </svg>
             </button>
-        </div>
+        </form>
     </div>
         
     <div class="project-card w-96 py-8 rounded-md p-4 flex flex-col justify-center items-start gap-y-4 bg-[#181b1e] bg-[url('/33.jpg')] bg-cover bg-center border-2 border-white/10">
@@ -79,8 +79,7 @@
         </div>
 
         <div class="w-full font-semibold flex justify-between items-center text-white">
-            <p> 09:38PM </p>
-            <p> 07 JANUARY 2021 </p>
+            <p> {{ creation_date }} </p>
         </div>
 
     </div>
@@ -89,8 +88,12 @@
 
 <script setup lang="ts">
 const update_model = ref(false)
-  const props = defineProps([ 'title', 'card_id', 'label', 'description' ])
+  const props = defineProps([ 'title', 'card_id', 'label', 'description', 'creation_date' ])
   const route = useRoute()
+  const newCardTitle = ref(null)
+  const newCardDescription = ref(null)
+  const cardLabelId = ref(null)
+
   const { id } = route.params
   const { liId } = route.query
   const removeCard = async () => {
@@ -105,6 +108,50 @@ const update_model = ref(false)
       }
     })
 
+    console.log(response)
+  }
+
+  const updateCardTitle = async () => {
+    const { data: response } = await useFetch(`/api/project/${id}/update`, {
+    method: 'POST',
+    body: {
+    card_operation: "update",
+    card: {
+      id: props.card_id,
+      title: newCardTitle
+     }
+    }
+    })
+    console.log(response)
+  }
+
+  const updateCardDescription = async () => {
+    const { data: response } = await useFetch(`/api/project/${id}/update`, {
+    method: 'POST',
+    body: {
+    card_operation: "update",
+    card: {
+      id: props.card_id,
+      description: newCardDescription
+     }
+    }
+    })
+    console.log(response)
+  }
+  // still need option to create a card label somewhere, ammar you can refactor this im just trying to make it work even if its shit.
+  const attachCardLabel = async () => {
+    const { data: response } = await useFetch(`/api/project/${id}/update`, {
+    method: 'POST',
+    body: {
+    label_operation: "attach",
+    card: {
+      id: props.card_id,
+     },
+    label: {
+      id: cardLabelId
+    }
+    }
+    })
     console.log(response)
   }
 </script>

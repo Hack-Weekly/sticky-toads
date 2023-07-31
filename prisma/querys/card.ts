@@ -28,6 +28,29 @@ export async function removeCard({ id }: Card) {
   if (error) throw error
 }
 
+async function update (constraint: any, data: any) {
+  await client.card.update({
+    where: constraint,
+    data
+    })
+}
+export async function updateCard ({ id, title, description }: Card) {
+  const { error } = await queryHandler('Failed To Update Card!', async () => {
+    if (title) {
+      await update({ id }, { title })
+    }
+
+    if (description) {
+      await update({ id }, { description })
+    }
+
+    if (title && description) {
+      await update({ where: id }, { title, description })
+    }
+  })
+
+  if (error) throw error
+}
 // work in progress
 
 // these two functions below can be be rewritten to be wayyy shorter by making a higher order function

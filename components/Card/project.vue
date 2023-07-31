@@ -3,21 +3,27 @@
 
         <div class="update-model flex p-2 max-w-[260px] rounded-md border border-white/10 bg-[#1e1e1e] bg-center bg-cover mb-1 flex-col justify-center items-start" v-if="update_model">
             <div class="h-10 gap-x-2 flex justify-center items-center rounded-md">
-                <input type="text" class="bg-gray-800 border h-8 border-white/10 rounded-md text-sm px-2 text-white outline-none" placeholder="update project title">
-                <button class="cursor-pointer min-w-[32px] min-h-[32px] h-8 rounded-md flex justify-center items-center border border-white/10 text-white transition-all duration-300 hover:text-cyan-400">
+              <form @submit.prevent="updateProjectName">
+                <input v-model="projectName" type="text" class="bg-gray-800 border h-8 border-white/10 rounded-md text-sm px-2 text-white outline-none" placeholder="update project title">
+                <button type="submit" class="cursor-pointer min-w-[32px] min-h-[32px] h-8 rounded-md flex justify-center items-center border border-white/10 text-white transition-all duration-300 hover:text-cyan-400">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                     </svg>
                 </button>
+              </form>
             </div>
+
             <div class="h-10 gap-x-2 flex justify-center items-center rounded-md">
-                <input type="text" class="bg-gray-800 border h-8 border-white/10 rounded-md text-sm px-2 text-white outline-none" placeholder="add user by username">
-                <button class="cursor-pointer min-w-[32px] min-h-[32px] h-8 rounded-md flex justify-center items-center border border-white/10 text-white transition-all duration-300 hover:text-cyan-400">
+                <!-- Doing this, just gonna display user id in edit, that way its easy for users to find their id -->
+              <form @submit.prevent="addUserToProject">
+                <input v-model="newUserId" type="text" class="bg-gray-800 border h-8 border-white/10 rounded-md text-sm px-2 text-white outline-none" placeholder="add user by id">
+                <button type="submit" class="cursor-pointer min-w-[32px] min-h-[32px] h-8 rounded-md flex justify-center items-center border border-white/10 text-white transition-all duration-300 hover:text-cyan-400">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                     </svg>
                 </button>
-            </div>
+              </form>
+              </div>
         </div>
 
         <div class="project-card w-96 py-8 rounded-md p-4 flex flex-col justify-center items-start gap-y-4 bg-[#181b1e] bg-[url('/22.jpg')] bg-cover bg-center border-2 border-white/10">
@@ -71,18 +77,43 @@
 </template>
 
 <script setup lang="ts">
-const update_model = ref(false)
+  import { ref } from 'vue'
+  const update_model = ref(false)
+  const projectName = ref(null)
+  const newUserId = ref(null)
   const props = defineProps(['title', 'id', 'image', 'anchor'])
   const deleteThisProject = async () => {
-      const { data: response } = await useFetch(`/api/project/${props.id}/delete`)
-    if(response) {
-            const { data: user }: any = await useFetch('/api/auth/retrieve')
-            const projects = useState('projects')
-            console.log(user)
-            projects.value = user._rawValue.user.user_project
-        }
+    const { data: response } = await useFetch(`/api/project/${props.id}/delete`)
+      if(response) {
+              const { data: user }: any = await useFetch('/api/auth/retrieve')
+              const projects = useState('projects')
+              console.log(user)
+              projects.value = user._rawValue.user.user_project
+          }
+    }
+
+  const updateProjectName = async () => {
+   const { data: response } = await useFetch(`/api/project/${props.id}/update`, {
+      method: 'POST',
+      body: {
+       project_name: projectName
+      }
+    })
+    console.log(response)
   }
 
+  const addUserToProject = async () => {
+    const { data: response } = await useFetch(`/api/project/${props.id}/update`, {
+      method: 'POST',
+      body: {
+        add_user: {
+          user_id: newUserId
+        }
+      }
+    })
+
+    console.log(response)
+  }
 </script>
 
 <style>

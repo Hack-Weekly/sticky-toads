@@ -26,6 +26,9 @@
                                             <label for="confirm_password" class="">Confirm Password</label>
                                             <FormDefaultInput id="confirm_password" type="password" name="passwordConfirm" placeholder="Confirm your  password..." />
                                         </div>
+                                      <div>
+                                          <h2>User ID: {{ userId }}</h2>
+                                      </div>
                                     </div>
                                     <template v-if="picture">
                                         <img :src="picture" class="w-auto h-72 bg-cover mt-7"/>
@@ -67,6 +70,8 @@ import { useForm } from 'vee-validate';
 import accountUpdate from '../../types/interfaces/accountUpdate';
 import * as yup from 'yup';
 
+const userState: any = useState('user')
+const userId = userState.value.user.id
 definePageMeta({
   layout: 'account', // exclude the default layout
   middleware: 'session'

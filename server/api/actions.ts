@@ -1,5 +1,5 @@
 import { createProjectList, deleteProjectList, updateProjectList } from "../../prisma/querys/project"
-import { assignUserToCard, createCard, removeCard, unassignUserFromCard } from "../../prisma/querys/card"
+import { assignUserToCard, createCard, removeCard, unassignUserFromCard, updateCard } from "../../prisma/querys/card"
 import { createLabel, attachCardAndLabel, updateLabelColor, updateLabelTitle, removeLabel, detachCardAndLabel } from "../../prisma/querys/label"
 import { ListActions, CardActions, LabelActions } from "../../types/interfaces/actions"
 
@@ -28,8 +28,8 @@ export const cardActionsMap: { [operation: string]: Function } = {
     if (!list_id) throw new Error('List id is required to perform this operation!')
     await createCard(card, list_id)
   },
-  'update': async ({  }) => {
-
+  'update': async ({ card }: CardActions) => {
+    await updateCard(card) 
   },
   'delete': async ({ card }: CardActions) => {
     await removeCard(card)

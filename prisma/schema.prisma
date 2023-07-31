@@ -83,4 +83,5 @@ model User_Project {
   project Project @relation(fields: [project_id], references: [id], onDelete: Cascade)
   user_role String? @unique
   @@map("user_project")
+  @@unique([user_id, project_id])
 }

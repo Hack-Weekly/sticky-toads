@@ -83,6 +83,8 @@
      validationSchema: schema
    });
 
+   useState('user', () => user)
+
  const onSubmit = handleSubmit(async (values) => {
     console.log(values.project_name)
     const { data: response } =  await useFetch('', {
