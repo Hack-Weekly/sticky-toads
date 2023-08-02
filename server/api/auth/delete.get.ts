@@ -9,7 +9,6 @@ export default defineEventHandler(async (event) => {
       const { user }: any = await checkSession(event)
       const { data, error } = await supabase.auth.admin.deleteUser(user.id)
       if (error) throw error
-      console.log(data)
       await client.user_Identifier.delete({
         where: {
           id: user.id

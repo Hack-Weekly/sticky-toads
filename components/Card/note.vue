@@ -113,8 +113,6 @@ const update_model = ref(false)
         }
       }
     })
-
-    console.log(response)
   }
 
   const updateCardTitle = async () => {
@@ -128,7 +126,6 @@ const update_model = ref(false)
      }
     }
     })
-    console.log(response)
   }
 
   const updateCardDescription = async () => {
@@ -142,7 +139,6 @@ const update_model = ref(false)
      }
     }
     })
-    console.log(response)
   }
   // still need option to create a card label somewhere, ammar you can refactor this im just trying to make it work even if its shit.
   const attachCardLabel = async () => {
@@ -158,6 +154,5 @@ const update_model = ref(false)
     }
     }
     })
-    console.log(response)
   }
 </script>

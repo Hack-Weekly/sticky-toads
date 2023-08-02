@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware (async (to, from) => {
     // console.log(authToken)
     if (!authToken) {
       // await fetch('/api/auth/sign-out')
-      // console.log('FETCHED ENDPOINT')
+
       if (to.path !== '/auth/sign-in') {
         return navigateTo('/auth/sign-in')
       }

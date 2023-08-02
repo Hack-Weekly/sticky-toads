@@ -40,8 +40,6 @@ export async function updateLabelColor (labelData: Label) {
 
 export async function removeLabel (labelData: Label) {
   const { id } = labelData
-
-  console.log(id)
   const { error } = await queryHandler('Failed To Remove Label!', async () => client.label.delete({
     where: { id }
   }))

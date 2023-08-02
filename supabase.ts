@@ -88,7 +88,6 @@ export async function getSignedUrl(userId: string) {
           // `file` contains the file object for the desired file
           // You can use `file.name` to get the name of the file
           const { data } = supabase.storage.from("profile").getPublicUrl(`public/${file.name}`);
-          // console.log(data.publicUrl);
           picture = data.publicUrl;
       } else {
           console.error("File not found");

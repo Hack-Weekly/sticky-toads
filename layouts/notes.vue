@@ -26,7 +26,7 @@
             
             <div class="current-user w-full h-16 border-b border-gray-700 flex gap-x-4 justify-center items-center">
                 <div class="p-1 border-2 border-cyan-500 rounded-full flex justify-center items-center">
-                    <img src="https://media.tenor.com/O3i0RscRs88AAAAC/anime-girl-anime.gif" alt="user-img" class="w-10 h-10 rounded-full">
+                    <img :src="profilePic? profilePic: 'https://media.tenor.com/O3i0RscRs88AAAAC/anime-girl-anime.gif'" alt="user-img" class="w-10 h-10 rounded-full"/>
                 </div>
                 <p class="text-white max-md:hidden"> {{ username }} </p>
             </div>
@@ -147,8 +147,11 @@
     const username = ref('')
     const cardData = ref({ title: '', description: '' })
     const id: any = ref('')
-    const { data: user }: any = await useFetch('/api/auth/retrieve')
-    username.value = user._rawValue.user.username
+    const profilePic = ref("");
+
+    const { data: user }: any = await useFetch("/api/auth/retrieve");
+    username.value = user.value.user.username;
+    profilePic.value = user.value.picture;
 
     const retrieveProjectData = async (project_id: any) => {
       const { data }: any = await useFetch(`/api/project/${project_id}/retrieve`)
@@ -157,11 +160,10 @@
 
     const route = useRoute()
     const { liId } = route.query
-    console.log(route.query)
     watch(() => route.params, async (value) => {
-    id.value = value.id
-    await retrieveProjectData(value.id)
-  }, { immediate: true, deep: true })
+        id.value = value.id
+        await retrieveProjectData(value.id)
+    }, { immediate: true, deep: true })
 
     async function createCard () {
       await $fetch(`/api/project/${id}/update`, {
@@ -197,7 +199,6 @@
       }
     })
     await retrieveProjectData(id.value)
-    console.log(lists.value)
   })
 
   const removeList = async (listId: string) => {
