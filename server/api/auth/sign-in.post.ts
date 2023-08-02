@@ -13,7 +13,6 @@ export default defineEventHandler(async (event) => {
     })
     if (error) throw error
     // @ts-ignore
-    // console.log(`User ${data.user.id} Signed In!`)
     const authToken = data.session.access_token
     return { auth_token: authToken }
   } catch (err) {

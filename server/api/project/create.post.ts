@@ -9,7 +9,6 @@ export default defineEventHandler(async (event) => {
   try {
     const { user }: any = await checkSession(event)
     await createProject(user.id, projectName)
-    console.log(`USER ${user.id} SUCCESSFULLY CREATED PROJECT ${projectName}`)
     res.end(`Successfully created project ${projectName}`)
   } catch (e) {
     console.log(e)

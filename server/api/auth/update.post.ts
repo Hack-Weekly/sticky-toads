@@ -12,10 +12,6 @@ export default defineEventHandler(async (event) => {
   const { username, email, password } = body.values
   const { file, information } = body.picture
 
-
-
-  // console.log(file)
-  // console.log(information)
   const checkEmailMessage: string = `Verification email has been sent to new email of ${email}`
   try {
       const { user }: any = await checkSession(event)
@@ -40,11 +36,12 @@ export default defineEventHandler(async (event) => {
           await updateUserIdentityUsername(user.id, username)
         },
         picture: async () => {
-          //const buffer = Buffer.from(file, 'base64url');
+          const base64Data = (file as string).replace(/^data:image\/[A-Za-z0-9]+;base64,/, '')
+          const buffer = Buffer.from(base64Data, 'base64');
           const fileExtension = information.name.substr(information.name.lastIndexOf('.'));
-         const newFileName = user.id + fileExtension;
-         const contentType = 'image/' + fileExtension.substr(1);
-          await updatePicture(newFileName, file, contentType)
+          const newFileName = user.id + fileExtension;
+          const contentType = information.type;
+          await updatePicture(newFileName, buffer, contentType)
         },
         all: async () => {
           await updateUserInfo({ email, password })
@@ -73,4 +70,6 @@ export default defineEventHandler(async (event) => {
   } catch (err) {
     return res.end('Error Updating User!') 
   }
+
+  return res.end('User Updated!')
 })

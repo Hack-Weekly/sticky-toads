@@ -6,7 +6,7 @@
                     <div class="divide-y divide-gray-700/50">
                         <h1 class="text-3xl font-bold text-center text-gray-100 pb-3">Edit your account info</h1>
                         <div class="pt-8 text-base font-semibold leading-7">
-                            <form @submit.prevent="onSubmit">
+                            <form @submit.prevent="onSubmit" enctype="multipart/form-data">
                                 <div class="flex flex-col md:flex-row gap-x-3">
                                     <div class="space-y-4 text-white w-full md:w-1/2">
                                         <div>
@@ -66,6 +66,8 @@
 </template>
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 import { useForm } from 'vee-validate';
 import accountUpdate from '../../types/interfaces/accountUpdate';
 import * as yup from 'yup';
@@ -98,38 +100,61 @@ const picture = ref('');
 const fileInformation = ref({})
 
 function onFileChange(event) {
-    const file = event.target.files[0];
+    let file = event.target.files[0];
     const information = {
         name: event.target.files[0].name,
         type: event.target.files[0].type,
     }
+    console.log(information)
     fileInformation.value = information;
-    // console.log(fileInformation.value)
+    
     if (file) {
-    	const reader = new FileReader();
-		reader.onload = () => {
-			const result = reader.result;
-			if (typeof result === 'string') {
-				picture.value = result;
-		    };
+        let types = ['image/png', 'image/jpeg', 'image/gif', 'image/svg+xml'];
+        let isValidType = false;
+        for (let type of types) {
+            if (information.type === type) {
+                isValidType = true;
+                console.log('yes')
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const result = reader.result;
+                    if (typeof result === 'string') {
+                        picture.value = result;
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
         }
-        reader.readAsDataURL(file);
+        if (!isValidType) {
+            console.log('no')
+            file = '';
+        }
     }
 }
+
 
 const onSubmit = handleSubmit(async(values) => {
     const { data: response } =  await useFetch('/api/auth/update', {
         onRequest({ request, options }) {
-        options.method = 'POST'
-        options.headers = { "Content-type": "application/json" };
-        options.body = {
-            values: values,
-            picture: { 
-                file: picture.value,
-                information: fileInformation.value
+            options.method = 'POST'
+            options.headers = { "Content-type": "application/json" };
+            options.body = {
+                values: values,
+                picture: { 
+                    file: picture.value,
+                    information: fileInformation.value
+                }
             }
-            // picture: picture.value
-        }
+        },
+        onResponse({ response }) {
+            if (response.status === 200) {
+                toast.success('Account updated successfully');
+            }
+        },  
+        onResponseError({ response }) {
+            if (response.status === 400 || response.status === 500) {
+                toast.error('Something went wrong');
+            }
         }
     })
 });

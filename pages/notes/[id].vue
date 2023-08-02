@@ -22,7 +22,6 @@
     // @ts-ignore
     list.value = lists.filter(l => l.id === value.liId)
     cards.value = list.value[0].card
-    console.log(cards.value)
     } else cards.value = lists
   })
 </script>

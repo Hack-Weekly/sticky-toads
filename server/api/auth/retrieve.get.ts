@@ -6,7 +6,6 @@ export default defineEventHandler(async (event) => {
     const { user }: any =  await checkSession(event)
     const userData = await getAllUserData(user.id)
     const picture = await getSignedUrl(user.id)
-    // console.log(`User ${user.id} Retrieved!`)
 
     return { user: userData, picture: picture }
   } catch (err) {

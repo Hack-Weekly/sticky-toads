@@ -11,7 +11,6 @@ import { ListActions, CardActions, LabelActions } from "../../types/interfaces/a
 export const listActionsMap: { [operation: string]: Function } = {
   'create': async ({ list_title, project_id, message }: ListActions) => {
     if (list_title) {
-      console.log(project_id, list_title, message)
       await createProjectList(project_id, list_title)
     } else throw new Error(message)
   },
