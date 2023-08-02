@@ -125,6 +125,23 @@ export async function retrieveProject (projectId: string) {
   return returned
 }
 
+export async function getUserIdByEmail (email: string) {
+  const { error, returned } = await queryHandler('Failed To Retrieve User ID!', async () => {
+    const user = await client.user_Identifier.findUnique({
+      where: {
+       email
+      },
+    })
+
+    const { id }: any = user
+    return id
+  })
+
+  if (error) throw error
+
+  return returned
+}
+
 export async function addUserToProject (projectId: string, userId: string) {
   const { error, returned } = await queryHandler('Failed To Add User To Project!', async () => updateProject({
     id: projectId

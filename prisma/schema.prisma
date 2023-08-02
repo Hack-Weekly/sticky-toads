@@ -11,6 +11,7 @@ datasource db {
 model User_Identifier {
   id           String         @unique
   username     String
+  email String @unique
   user_project User_Project[]
   card_assignments Card_Assignments[]
   @@map("user_identifier")

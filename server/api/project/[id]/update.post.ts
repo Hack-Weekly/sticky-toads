@@ -1,5 +1,5 @@
 import { checkSession } from "../../../../supabase"
-import { updateProjectName, addUserToProject } from '../../../../prisma/querys/project'
+import { updateProjectName, addUserToProject, getUserIdByEmail } from '../../../../prisma/querys/project'
 import { Card, Label } from '../../../../types/interfaces/project'
 import { listActionsMap, cardActionsMap, labelActionsMap } from "../../actions"
 
@@ -26,8 +26,10 @@ export default defineEventHandler(async (event) => {
 
     if (add_user) {
       // user id is the id of the user we want to add...
-      const addUser = { user_id: add_user.user_id }
-      await addUserToProject(id, addUser.user_id)
+      const { email } = add_user
+      const userId = await getUserIdByEmail(email)
+      console.log(userId)
+      await addUserToProject(id, userId)
       console.log('User Added To Project!')
     }
 

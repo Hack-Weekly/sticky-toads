@@ -9,7 +9,16 @@ async function updateUserIdentity (whereObj: any, dataObj: any) {
 
 export async function updateUserIdentityUsername (userId: string, username: string) {
   if (!userId || !username) throw new Error('Id or Username is falsy, please try again!')
-  await updateUserIdentity({ id: userId }, { username })
+  await updateUserIdentity({ id: userId }, { 
+      username
+  })
+}
+
+export async function updateUserIdentityEmail (userId: string, email: string) {
+  if (!userId || !email) throw new Error('Id or Email is falsy, please try again!')
+  await updateUserIdentity({ id: userId }, { 
+      email
+  })
 }
 
 export async function getAllUserData (userId: string) {

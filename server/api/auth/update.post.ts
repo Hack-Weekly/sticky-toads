@@ -1,6 +1,5 @@
 import { supabase, checkSession, updateUserInfo, updatePicture } from "../../../supabase";
-import { updateUserIdentityUsername } from "../../../prisma/querys/user";
-import {object} from "yup";
+import { updateUserIdentityEmail, updateUserIdentityUsername } from "../../../prisma/querys/user";
 
 // will be properly tested once ui guys can build me a form since supabase adds the token to localstorage
 
@@ -19,14 +18,17 @@ export default defineEventHandler(async (event) => {
       const actions = {
         emailAndPassword: async () => {
           await updateUserInfo({ email, password })
+          await updateUserIdentityEmail(user.id, email)
           return checkEmailMessage
         },
         emailAndUsername: async () => {
           await updateUserInfo({ email })
+          await updateUserIdentityEmail(user.id, email)
           await updateUserIdentityUsername(user.id, username)
         },
         email: async () => {
           await updateUserInfo({ email })
+          await updateUserIdentityEmail(user.id, email)
           return checkEmailMessage
         },
         password: async () => {
@@ -45,8 +47,8 @@ export default defineEventHandler(async (event) => {
         },
         all: async () => {
           await updateUserInfo({ email, password })
+          await updateUserIdentityEmail(user.id, email)
           await updateUserIdentityUsername(user.id, username)
-
           return checkEmailMessage
         }
       }

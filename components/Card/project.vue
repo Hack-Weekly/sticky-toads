@@ -38,10 +38,10 @@
         <!-- Doing this, just gonna display user id in edit, that way its easy for users to find their id -->
         <form @submit.prevent="addUserToProject" class="flex gap-x-2">
           <input
-            v-model="newUserId"
+            v-model="newUserEmail"
             type="text"
             class="bg-gray-800 border h-8 border-white/10 rounded-md text-sm px-2 text-white outline-none"
-            placeholder="add user by id"
+            placeholder="add user by email"
           />
           <button
             type="submit"
@@ -161,7 +161,7 @@ import "vue3-toastify/dist/index.css";
 
 const update_model = ref(false);
 const projectName = ref(null);
-const newUserId = ref(null);
+const newUserEmail = ref(null);
 const props = defineProps(["title", "id", "image", "anchor"]);
 
 const deleteThisProject = async () => {
@@ -205,7 +205,7 @@ const addUserToProject = async () => {
     method: "POST",
     body: {
       add_user: {
-        user_id: newUserId,
+        email: newUserEmail,
       },
     },
   });

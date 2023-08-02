@@ -2,7 +2,6 @@ import { supabase, isUserSession } from "../../../supabase"
 import { client } from "../../../prisma/client"
 
 export default defineEventHandler(async (event) => {
-  const { res } = event.node
   const body = await readBody(event)
 
   const email = body.email
@@ -25,7 +24,8 @@ export default defineEventHandler(async (event) => {
     const createUserIdentifier = await client.user_Identifier.create({
       data: {
         id: userId,
-        username
+        username,
+        email
       }
     })
 

@@ -26,9 +26,6 @@
                                             <label for="confirm_password" class="">Confirm Password</label>
                                             <FormDefaultInput id="confirm_password" type="password" name="passwordConfirm" placeholder="Confirm your  password..." />
                                         </div>
-                                      <div>
-                                          <h2>User ID: {{ userId }}</h2>
-                                      </div>
                                     </div>
                                     <template v-if="picture">
                                         <img :src="picture" class="w-auto h-72 bg-cover mt-7"/>
