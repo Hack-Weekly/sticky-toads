@@ -1,11 +1,87 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model User_Identifier {
+  id           String         @unique
+  username     String
+  user_project User_Project[]
+  card_assignments Card_Assignments[]
+  @@map("user_identifier")
+}
+
+model Project {
+  id           String         @id @unique @default(dbgenerated("gen_random_uuid()"))
+  name         String
+  list         List[]
+  user_project User_Project[]
+
+  @@map("project")
+}
+
+model List {
+  id         String  @id @unique @default(dbgenerated("gen_random_uuid()"))
+  project_id String
+  title      String
+  card       Card[]
+  project    Project @relation(fields: [project_id], references: [id], onDelete: Cascade)
+
+  @@map("list")
+}
+
+model Label {
+  id         String       @id @unique @default(dbgenerated("gen_random_uuid()"))
+  title      String
+  color      String
+  card_label Card_Label[]
+
+  @@map("label")
+}
+
+model Card {
+  id String  @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Text
+  list_id String
+  list List  @relation(fields: [list_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  card_label Card_Label[]
+  title String
+  description String
+  creation_date DateTime @default(now())
+  assigned_users Card_Assignments[]
+  @@map("card")
+}
+
+model Card_Label {
+  id       String @id @unique @default(dbgenerated("gen_random_uuid()"))
+  card_id  String @unique
+  label_id String @unique
+  card     Card   @relation(fields: [card_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  label    Label  @relation(fields: [label_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("card_label")
+}
+
+model Card_Assignments {
+  id String @id @unique @default(dbgenerated("gen_random_uuid()"))
+  card_id String @unique
+  user_id String @unique
+  card Card @relation(fields: [card_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user User_Identifier @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // if somehow the relations are shit then i will use project_id from user_project or project tables/models
+}
+
+model User_Project {
+  id         String          @id @unique @default(dbgenerated("gen_random_uuid()"))
+  user_id    String
+  project_id String
+  user User_Identifier @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  user_role String? @unique
+  @@map("user_project")
+  @@unique([user_id, project_id])
 }

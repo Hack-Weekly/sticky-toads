@@ -1,0 +1,1 @@
+Keep track of the users assigned to card, before that tho I need to revise the schema.
